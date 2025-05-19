@@ -11,15 +11,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/getPlayers")
+@WebServlet("/players")
 public class GetPlayersServlet extends HttpServlet {
 
     private final PlayerDao playerDao = new PlayerDao();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Player> all = playerDao.getAll();
-        System.out.println(all);
-
+        List<Player> players = playerDao.findAll();
+        req.setAttribute("players", players);
+        req.getRequestDispatcher("/players.jsp").forward(req, resp);
     }
 }

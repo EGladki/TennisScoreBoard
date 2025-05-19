@@ -13,23 +13,19 @@ public class PlayerDao {
 
 
     public Player save(PlayerRequestDto requestDto) {
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        session.beginTransaction();
+        try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            session.beginTransaction();
 
-        Player player = MappingUtils.convertToPlayer(requestDto);
-
-        session.persist(player);
-        session.getTransaction().commit();
-
-        session.close();
-
-        return player;
+            Player player = MappingUtils.convertToPlayer(requestDto);
+            session.persist(player);
+            session.getTransaction().commit();
+            return player;
+        }
     }
 
-    public List<Player> getAll() {
-        Session session = HibernateUtils.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-
-        return session.createQuery("FROM Player", Player.class).getResultList();
+    public List<Player> findAll() {
+        try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            return session.createQuery("FROM Player", Player.class).getResultList();
+        }
     }
 }

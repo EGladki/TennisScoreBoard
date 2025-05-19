@@ -9,6 +9,6 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 public class PlayerResponseDto {
-    private int id;
+    private Long id;
     private String name;
 }
