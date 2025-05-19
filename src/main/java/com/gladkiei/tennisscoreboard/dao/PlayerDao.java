@@ -5,31 +5,34 @@ import com.gladkiei.tennisscoreboard.models.Player;
 import com.gladkiei.tennisscoreboard.utils.HibernateUtils;
 import com.gladkiei.tennisscoreboard.utils.MappingUtils;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.util.List;
 
-
 public class PlayerDao {
 
-
     public Player save(PlayerRequestDto requestDto) {
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        session.beginTransaction();
+        try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
 
-        Player player = MappingUtils.convertToPlayer(requestDto);
+            Player player = MappingUtils.convertToPlayer(requestDto);
 
-        session.persist(player);
-        session.getTransaction().commit();
+            session.persist(player);
+            session.getTransaction().commit();
 
-        session.close();
-
-        return player;
+            return player;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public List<Player> getAll() {
-        Session session = HibernateUtils.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
+        try (Session session = HibernateUtils.getSessionFactory().getCurrentSession()) {
+            session.beginTransaction();
 
-        return session.createQuery("FROM Player", Player.class).getResultList();
+            return session.createQuery("FROM Player", Player.class).getResultList();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -31,10 +31,7 @@ public class NewMatchServlet extends HttpServlet {
         Player player1 = playerDao.save(playerRequestDto1);
         Player player2 = playerDao.save(playerRequestDto2);
 
-        System.out.println(player1);
-        System.out.println(player2);
-
-        playerDao.getAll().forEach(System.out::println);
+        resp.sendRedirect(req.getContextPath() + "/matches-page.jsp");
 
     }
 }

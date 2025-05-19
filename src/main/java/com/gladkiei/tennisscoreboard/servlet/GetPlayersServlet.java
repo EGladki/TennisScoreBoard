@@ -20,6 +20,5 @@ public class GetPlayersServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Player> all = playerDao.getAll();
         System.out.println(all);
-
     }
 }
