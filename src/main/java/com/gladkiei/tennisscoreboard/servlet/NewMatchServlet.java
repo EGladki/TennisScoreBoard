@@ -24,6 +24,10 @@ public class NewMatchServlet extends HttpServlet {
         Player player1 = playerDao.save(new PlayerRequestDto(first));
         Player player2 = playerDao.save(new PlayerRequestDto(second));
 
+        resp.sendRedirect("players");
+
+//        req.getRequestDispatcher("/players").forward(req, resp);
+
 //        resp.sendRedirect(req.getContextPath() + "/match-page.jsp");
 
     }
