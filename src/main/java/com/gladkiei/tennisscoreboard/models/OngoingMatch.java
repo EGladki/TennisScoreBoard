@@ -1,42 +1,28 @@
 package com.gladkiei.tennisscoreboard.models;
 
-import jakarta.persistence.*;
 import lombok.*;
 
-@Setter @Getter @NoArgsConstructor @AllArgsConstructor @ToString
-@Entity
-@Table(name = "tennis_match")
+import java.util.UUID;
+
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+
 public class OngoingMatch {
 
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID uuid;
+    //    private Match match;
+    private Long player1Id;
+    private Long player2Id;
+    private int player1Score;
+    private int player2Score;
 
-    @ManyToOne
-    @JoinColumn(name = "player1_id")
-    private Player player1;
-
-    @ManyToOne
-    @JoinColumn(name = "player2_id")
-    private Player player2;
-
-    private Long player1Score;
-
-    private Long player2Score;
-
-    @ManyToOne
-    @JoinColumn(name = "winner_id")
-    private Player winner;
-
-    public OngoingMatch(Player player1, Player player2) {
-        this.player1 = player1;
-        this.player2 = player2;
-    }
-
-    public OngoingMatch(Player player1, Player player2, Player winner) {
-        this.player1 = player1;
-        this.player2 = player2;
-        this.winner = winner;
+    public OngoingMatch(Long player1Id, Long player2Id, int player1Score, int player2Score) {
+        this.player1Id = player1Id;
+        this.player2Id = player2Id;
+        this.player1Score = player1Score;
+        this.player2Score = player2Score;
     }
 }

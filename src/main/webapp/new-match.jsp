@@ -125,5 +125,6 @@
     <button type="submit">Добавить игроков</button>
 </form>
 <a href="matches">Список матчей</a>
+<a href="players">Список игроков</a>
 </body>
 </html>

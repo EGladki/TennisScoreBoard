@@ -5,7 +5,7 @@ import lombok.*;
 
 @Setter @Getter @NoArgsConstructor @AllArgsConstructor @ToString
 @Entity
-@Table(name = "tennis_match")
+@Table(name = "matches")
 public class Match {
 
     @Id
