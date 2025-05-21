@@ -25,7 +25,14 @@ public class PlayerDao {
 
     public List<Player> findAll() {
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            session.beginTransaction();
             return session.createQuery("FROM Player", Player.class).getResultList();
+        }
+    }
+
+    public Player findById(Long id) {
+        try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            return session.find(Player.class, id);
         }
     }
 }

@@ -15,7 +15,7 @@ public class OngoingMatchDao {
         return instance;
     }
 
-    private final ConcurrentHashMap<UUID, OngoingMatch> matches = new ConcurrentHashMap<>();
+    private final static ConcurrentHashMap<UUID, OngoingMatch> matches = new ConcurrentHashMap<>();
 
     public void put(UUID uuid, OngoingMatch match) {
         matches.put(uuid, match);
@@ -23,6 +23,10 @@ public class OngoingMatchDao {
 
     public OngoingMatch getMatch(UUID uuid) {
         return matches.get(uuid);
+    }
+
+    public void remove(UUID uuid) {
+        matches.remove(uuid);
     }
 
 }

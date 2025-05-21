@@ -11,31 +11,34 @@
       padding: 40px;
     }
 
-    h1 {
-      color: #ffffff;
+    table {
+      width: 100%;
+      border-collapse: collapse;
       margin-bottom: 30px;
     }
 
-    .player {
-      margin-bottom: 30px;
-      padding: 20px;
-      background-color: #1e1e1e;
-      border-radius: 10px;
+    th, td {
       border: 1px solid #2a2a2a;
+      padding: 15px;
+      text-align: center;
     }
 
-    .score {
-      font-size: 24px;
-      margin-bottom: 15px;
+    th {
+      background-color: #1f1f1f;
+    }
+
+    td {
+      background-color: #1a1a1a;
     }
 
     form {
       display: inline-block;
-      margin-right: 20px;
+      margin: 10px;
     }
 
     button {
-      padding: 10px 20px;
+      padding: 12px 24px;
+      font-size: 16px;
       background-color: #03dac6;
       border: none;
       color: #000;
@@ -47,27 +50,49 @@
     button:hover {
       background-color: #00bfa5;
     }
+
+    a {
+      color: #03dac6;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 30px;
+    }
+
+    a:hover {
+      color: #00bfa5;
+    }
   </style>
 </head>
 <body>
 
-<h1>Счёт матча</h1>
+<h1>Текущий матч</h1>
 
-<div class="player">
-  <div class="score">${player1.name}: ${player1Score}</div>
-  <form method="post" action="score">
-    <input type="hidden" name="playerId" value="${player1.id}">
-    <button type="submit">Очко</button>
-  </form>
-</div>
+<table>
+  <tr>
+    <th>Игрок</th>
+    <th>Счёт</th>
+  </tr>
+  <tr>
+    <td>${player1.name}</td>
+    <td>${player1Score}</td>
+  </tr>
+  <tr>
+    <td>${player2.name}</td>
+    <td>${player2Score}</td>
+  </tr>
+</table>
 
-<div class="player">
-  <div class="score">${player2.name}: ${player2Score}</div>
-  <form method="post" action="score">
-    <input type="hidden" name="playerId" value="${player2.id}">
-    <button type="submit">Очко</button>
-  </form>
-</div>
+<!-- Кнопка: Игрок 1 выиграл очко -->
+<form method="post" action="match-score?uuid=${uuid}">
+  <input type="hidden" name="playerId" value="${player1.id}">
+  <button type="submit">${player1.name} выиграл очко</button>
+</form>
+
+<!-- Кнопка: Игрок 2 выиграл очко -->
+<form method="post" action="match-score?uuid=${uuid}">
+  <input type="hidden" name="playerId" value="${player2.id}">
+  <button type="submit">${player2.name} выиграл очко</button>
+</form>
 
 <a href="matches">⬅ Назад к матчам</a>
 
