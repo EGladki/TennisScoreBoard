@@ -9,34 +9,68 @@ import static com.gladkiei.tennisscoreboard.service.OngoingMatchService.START_GA
 import static com.gladkiei.tennisscoreboard.service.OngoingMatchService.START_SCORE;
 
 public class MatchScoreCalculationService {
+    private final static int MAX_SCORE = 40;
+    private final static int MAX_GAMES = 6;
+    private final static int MAX_SETS = 2;
+    private final static int ZERO = 0;
+    private final static int FIRST_ADDING_SCORE = 15;
+    private final static int SECOND_ADDING_SCORE = 15;
+    private final static int FINAL_ADDING_SCORE = 10;
     private final OngoingMatchDao ongoingMatchDao = new OngoingMatchDao();
+
 
     public void updateScore(UUID uuid, Long playerId) {
         OngoingMatch match = OngoingMatchDao.getInstance().getMatch(uuid);
         Long player1Id = match.getPlayer1Id();
 
         if (player1Id.equals(playerId)) {
-            OngoingMatch updated = new OngoingMatch(uuid, match.getPlayer1Id(), match.getPlayer2Id(), match.getPlayer1Score() + 1, match.getPlayer2Score(), match.getPlayer1Game(), match.getPlayer2Game(), match.getPlayer1Set(), match.getPlayer2Set());
-            ongoingMatchDao.refresh(uuid, updated);
-
-            if (checkScore(updated.getPlayer1Score())) {
-                updateGame(uuid, playerId);
-                if (checkGames(updated.getPlayer1Game())) {
-                    updateSet(uuid, playerId);
-                }
-            }
+            givePlayer1Score(player1Id, uuid, match);
         }
+
         Long player2Id = match.getPlayer2Id();
 
         if (player2Id.equals(playerId)) {
-            OngoingMatch updated = new OngoingMatch(uuid, match.getPlayer1Id(), match.getPlayer2Id(), match.getPlayer1Score(), match.getPlayer2Score() + 1, match.getPlayer1Game(), match.getPlayer2Game(), match.getPlayer1Set(), match.getPlayer2Set());
-            ongoingMatchDao.refresh(uuid, updated);
+            givePlayer2Score(player2Id, uuid, match);
+        }
 
-            if (checkScore(updated.getPlayer1Score())) {
-                updateGame(uuid, playerId);
-                if (checkGames(updated.getPlayer1Game())) {
-                    updateSet(uuid, playerId);
-                }
+    }
+
+    private void givePlayer1Score(Long playerId, UUID uuid, OngoingMatch match) {
+        int score = calculateAddingScore(match.getPlayer1Score());
+        OngoingMatch updated = new OngoingMatch(uuid, match.getPlayer1Id(), match.getPlayer2Id(), match.getPlayer1Score() + score, match.getPlayer2Score(), match.getPlayer1Game(), match.getPlayer2Game(), match.getPlayer1Set(), match.getPlayer2Set());
+        ongoingMatchDao.refresh(uuid, updated);
+
+        if (isMatchFinished(updated.getPlayer1Score())) {
+            updateGame(uuid, playerId);
+            if (isGameFinished(updated.getPlayer1Game())) {
+                updateSet(uuid, playerId);
+            }
+        }
+    }
+
+    private void givePlayer2Score(Long playerId, UUID uuid, OngoingMatch match) {
+        int score = calculateAddingScore(match.getPlayer2Score());
+        OngoingMatch updated = new OngoingMatch(uuid, match.getPlayer1Id(), match.getPlayer2Id(), match.getPlayer1Score(), match.getPlayer2Score() + score, match.getPlayer1Game(), match.getPlayer2Game(), match.getPlayer1Set(), match.getPlayer2Set());
+        ongoingMatchDao.refresh(uuid, updated);
+
+        if (isMatchFinished(updated.getPlayer2Score())) {
+            updateGame(uuid, playerId);
+            if (isGameFinished(updated.getPlayer2Game())) {
+                updateSet(uuid, playerId);
+            }
+        }
+    }
+
+    private int calculateAddingScore(int score) {
+        switch (score) {
+            case ZERO -> {
+                return FIRST_ADDING_SCORE;
+            }
+            case FIRST_ADDING_SCORE -> {
+                return SECOND_ADDING_SCORE;
+            }
+            default -> {
+                return FINAL_ADDING_SCORE;
             }
         }
 
@@ -45,7 +79,6 @@ public class MatchScoreCalculationService {
     public void updateGame(UUID uuid, Long playerId) {
         OngoingMatch match = OngoingMatchDao.getInstance().getMatch(uuid);
         Long player1Id = match.getPlayer1Id();
-        Long player2Id = match.getPlayer2Id();
 
         if (player1Id.equals(playerId)) {
             OngoingMatch updated = new OngoingMatch(uuid,
@@ -61,6 +94,9 @@ public class MatchScoreCalculationService {
             OngoingMatchDao.getInstance().remove(uuid);
             OngoingMatchDao.getInstance().put(uuid, updated);
         }
+
+        Long player2Id = match.getPlayer2Id();
+
         if (player2Id.equals(playerId)) {
             OngoingMatch updated = new OngoingMatch(uuid,
                     match.getPlayer1Id(),
@@ -112,12 +148,12 @@ public class MatchScoreCalculationService {
         }
     }
 
-    private boolean checkScore(int score) {
-        return score >= 4;
+    private boolean isMatchFinished(int score) {
+        return score > MAX_SCORE;
     }
 
-    private boolean checkGames(int games) {
-        return games >= 6;
+    private boolean isGameFinished(int games) {
+        return games >= MAX_GAMES;
     }
 
 }

@@ -13,7 +13,6 @@ import java.util.UUID;
 public class OngoingMatch {
 
     private UUID uuid;
-    //    private Match match;
     private Long player1Id;
     private Long player2Id;
     private int player1Score;

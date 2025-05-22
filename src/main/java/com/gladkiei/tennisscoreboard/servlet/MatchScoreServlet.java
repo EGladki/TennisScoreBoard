@@ -3,7 +3,6 @@ package com.gladkiei.tennisscoreboard.servlet;
 import com.gladkiei.tennisscoreboard.dao.OngoingMatchDao;
 import com.gladkiei.tennisscoreboard.dao.PlayerDao;
 import com.gladkiei.tennisscoreboard.models.OngoingMatch;
-import com.gladkiei.tennisscoreboard.models.Player;
 import com.gladkiei.tennisscoreboard.service.MatchScoreCalculationService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -24,18 +23,7 @@ public class MatchScoreServlet extends HttpServlet {
         UUID uuid = UUID.fromString(req.getParameter("uuid"));
         OngoingMatch match = OngoingMatchDao.getInstance().getMatch(uuid);
 
-        Player player1 = playerDao.findById(match.getPlayer1Id());
-        Player player2 = playerDao.findById(match.getPlayer2Id());
-
-        req.setAttribute("uuid", uuid.toString());
-        req.setAttribute("player1", player1);
-        req.setAttribute("player2", player2);
-        req.setAttribute("player1Score", match.getPlayer1Score());
-        req.setAttribute("player2Score", match.getPlayer2Score());
-        req.setAttribute("player1Game", match.getPlayer1Game());
-        req.setAttribute("player2Game", match.getPlayer2Game());
-        req.setAttribute("player1Set", match.getPlayer1Set());
-        req.setAttribute("player2Set", match.getPlayer2Set());
+        setAllAttributes(req, uuid, match);
 
         System.out.println(match);
         req.getRequestDispatcher("/match-score.jsp").forward(req, resp);
@@ -51,7 +39,19 @@ public class MatchScoreServlet extends HttpServlet {
 
         matchScoreCalculationService.updateScore(uuid, id);
 
-        resp.sendRedirect("match-score" + "?uuid=" + uuid );
+        resp.sendRedirect("match-score" + "?uuid=" + uuid);
 
+    }
+
+    private void setAllAttributes(HttpServletRequest req, UUID uuid, OngoingMatch match) {
+        req.setAttribute("uuid", uuid.toString());
+        req.setAttribute("player1", playerDao.findById(match.getPlayer1Id()));
+        req.setAttribute("player2", playerDao.findById(match.getPlayer2Id()));
+        req.setAttribute("player1Score", match.getPlayer1Score());
+        req.setAttribute("player2Score", match.getPlayer2Score());
+        req.setAttribute("player1Game", match.getPlayer1Game());
+        req.setAttribute("player2Game", match.getPlayer2Game());
+        req.setAttribute("player1Set", match.getPlayer1Set());
+        req.setAttribute("player2Set", match.getPlayer2Set());
     }
 }

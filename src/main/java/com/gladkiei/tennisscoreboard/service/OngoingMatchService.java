@@ -27,8 +27,5 @@ public class OngoingMatchService {
         OngoingMatchDao.getInstance().put(uuid, ongoingMatch);
     }
 
-    private void updateScore(Player player) {
-
-    }
 
 }
