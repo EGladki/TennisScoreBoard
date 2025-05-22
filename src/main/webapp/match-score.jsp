@@ -70,15 +70,21 @@
 <table>
   <tr>
     <th>Игрок</th>
-    <th>Счёт</th>
+    <th>Score</th>
+    <th>Game</th>
+    <th>Set</th>
   </tr>
   <tr>
     <td>${player1.name}</td>
     <td>${player1Score}</td>
+    <td>${player1Game}</td>
+    <td>${player1Set}</td>
   </tr>
   <tr>
     <td>${player2.name}</td>
     <td>${player2Score}</td>
+    <td>${player2Game}</td>
+    <td>${player2Set}</td>
   </tr>
 </table>
 

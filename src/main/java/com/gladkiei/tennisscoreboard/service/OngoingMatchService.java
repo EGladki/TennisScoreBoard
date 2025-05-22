@@ -7,7 +7,9 @@ import com.gladkiei.tennisscoreboard.dao.OngoingMatchDao;
 import java.util.UUID;
 
 public class OngoingMatchService {
-    private static final int START_SCORE = 0;
+    static final int START_SCORE = 0;
+    static final int START_GAME = 0;
+    static final int START_SET = 0;
 
     public OngoingMatch startMatch(Player player1, Player player2) {
         OngoingMatch ongoingMatch = createOngoingMatch(player1, player2);
@@ -16,7 +18,7 @@ public class OngoingMatchService {
     }
 
     private OngoingMatch createOngoingMatch(Player player1, Player player2) {
-        return new OngoingMatch(player1.getId(), player2.getId(), START_SCORE, START_SCORE);
+        return new OngoingMatch(player1.getId(), player2.getId(), START_SCORE, START_SCORE, START_GAME, START_GAME, START_SET, START_SET);
     }
 
     private void addToStorage(OngoingMatch ongoingMatch) {
@@ -29,6 +31,4 @@ public class OngoingMatchService {
 
     }
 
-    // Хранит текущие матчи и позволяет их записывать/читать
-    // getMatch
 }
