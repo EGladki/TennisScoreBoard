@@ -12,11 +12,19 @@ public class MatchDao {
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
 
             return session.createQuery("""
-            SELECT m FROM Match m
-            JOIN FETCH m.player1
-            JOIN FETCH m.player2
-            LEFT JOIN FETCH m.winner
-            """, Match.class).getResultList();
+                    SELECT m FROM Match m
+                    JOIN FETCH m.player1
+                    JOIN FETCH m.player2
+                    LEFT JOIN FETCH m.winner
+                    """, Match.class).getResultList();
+        }
+    }
+
+    public void save(Match match) {
+        try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            session.persist(match);
+            session.getTransaction().commit();
         }
     }
 }

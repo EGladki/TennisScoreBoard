@@ -1,7 +1,10 @@
 package com.gladkiei.tennisscoreboard.service;
 
-import com.gladkiei.tennisscoreboard.dao.OngoingMatchDao;
-import com.gladkiei.tennisscoreboard.models.OngoingMatch;
+import com.gladkiei.tennisscoreboard.dao.MatchScoreModelDao;
+import com.gladkiei.tennisscoreboard.dao.PlayerDao;
+import com.gladkiei.tennisscoreboard.models.Match;
+import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
+import com.gladkiei.tennisscoreboard.models.Player;
 
 import java.util.UUID;
 
@@ -16,11 +19,12 @@ public class MatchScoreCalculationService {
     private final static int FIRST_ADDING_SCORE = 15;
     private final static int SECOND_ADDING_SCORE = 15;
     private final static int FINAL_ADDING_SCORE = 10;
-    private final OngoingMatchDao ongoingMatchDao = new OngoingMatchDao();
-
+    private final MatchScoreModelDao matchScoreModelDao = new MatchScoreModelDao();
+    private final PlayerDao playerDao = new PlayerDao();
+    private final FinishedMatchesPersistenceService finishedMatchesPersistenceService = new FinishedMatchesPersistenceService();
 
     public void updateScore(UUID uuid, Long playerId) {
-        OngoingMatch match = OngoingMatchDao.getInstance().getMatch(uuid);
+        MatchScoreModel match = MatchScoreModelDao.getInstance().getModel(uuid);
         Long player1Id = match.getPlayer1Id();
 
         if (player1Id.equals(playerId)) {
@@ -35,28 +39,37 @@ public class MatchScoreCalculationService {
 
     }
 
-    private void givePlayer1Score(Long playerId, UUID uuid, OngoingMatch match) {
+    private void givePlayer1Score(Long playerId, UUID uuid, MatchScoreModel match) {
         int score = calculateAddingScore(match.getPlayer1Score());
-        OngoingMatch updated = new OngoingMatch(uuid, match.getPlayer1Id(), match.getPlayer2Id(), match.getPlayer1Score() + score, match.getPlayer2Score(), match.getPlayer1Game(), match.getPlayer2Game(), match.getPlayer1Set(), match.getPlayer2Set());
-        ongoingMatchDao.refresh(uuid, updated);
+        MatchScoreModel updated = new MatchScoreModel(uuid, match.getPlayer1Id(), match.getPlayer2Id(), match.getPlayer1Score() + score, match.getPlayer2Score(), match.getPlayer1Game(), match.getPlayer2Game(), match.getPlayer1Set(), match.getPlayer2Set());
+        matchScoreModelDao.refresh(uuid, updated);
 
         if (isMatchFinished(updated.getPlayer1Score())) {
             updateGame(uuid, playerId);
             if (isGameFinished(updated.getPlayer1Game())) {
                 updateSet(uuid, playerId);
+                if (isSetFinished(updated.getPlayer1Set())) {
+                    Match finishedMatch = createFinishedMatch(uuid, playerId);
+                    finishedMatchesPersistenceService.save(finishedMatch);
+                }
             }
         }
     }
 
-    private void givePlayer2Score(Long playerId, UUID uuid, OngoingMatch match) {
+    private void givePlayer2Score(Long playerId, UUID uuid, MatchScoreModel match) {
         int score = calculateAddingScore(match.getPlayer2Score());
-        OngoingMatch updated = new OngoingMatch(uuid, match.getPlayer1Id(), match.getPlayer2Id(), match.getPlayer1Score(), match.getPlayer2Score() + score, match.getPlayer1Game(), match.getPlayer2Game(), match.getPlayer1Set(), match.getPlayer2Set());
-        ongoingMatchDao.refresh(uuid, updated);
+        MatchScoreModel updated = new MatchScoreModel(uuid, match.getPlayer1Id(), match.getPlayer2Id(), match.getPlayer1Score(), match.getPlayer2Score() + score, match.getPlayer1Game(), match.getPlayer2Game(), match.getPlayer1Set(), match.getPlayer2Set());
+        matchScoreModelDao.refresh(uuid, updated);
 
         if (isMatchFinished(updated.getPlayer2Score())) {
             updateGame(uuid, playerId);
             if (isGameFinished(updated.getPlayer2Game())) {
                 updateSet(uuid, playerId);
+                if (isSetFinished(updated.getPlayer2Set())) {
+                    Match finishedMatch = createFinishedMatch(uuid, playerId);
+                    finishedMatchesPersistenceService.save(finishedMatch);
+
+                }
             }
         }
     }
@@ -73,15 +86,14 @@ public class MatchScoreCalculationService {
                 return FINAL_ADDING_SCORE;
             }
         }
-
     }
 
     public void updateGame(UUID uuid, Long playerId) {
-        OngoingMatch match = OngoingMatchDao.getInstance().getMatch(uuid);
+        MatchScoreModel match = MatchScoreModelDao.getInstance().getModel(uuid);
         Long player1Id = match.getPlayer1Id();
 
         if (player1Id.equals(playerId)) {
-            OngoingMatch updated = new OngoingMatch(uuid,
+            MatchScoreModel updated = new MatchScoreModel(uuid,
                     match.getPlayer1Id(),
                     match.getPlayer2Id(),
                     START_SCORE,
@@ -91,14 +103,14 @@ public class MatchScoreCalculationService {
                     match.getPlayer1Set(),
                     match.getPlayer2Set());
 
-            OngoingMatchDao.getInstance().remove(uuid);
-            OngoingMatchDao.getInstance().put(uuid, updated);
+            MatchScoreModelDao.getInstance().remove(uuid);
+            MatchScoreModelDao.getInstance().put(uuid, updated);
         }
 
         Long player2Id = match.getPlayer2Id();
 
         if (player2Id.equals(playerId)) {
-            OngoingMatch updated = new OngoingMatch(uuid,
+            MatchScoreModel updated = new MatchScoreModel(uuid,
                     match.getPlayer1Id(),
                     match.getPlayer2Id(),
                     START_SCORE,
@@ -108,18 +120,18 @@ public class MatchScoreCalculationService {
                     match.getPlayer1Set(),
                     match.getPlayer2Set());
 
-            OngoingMatchDao.getInstance().remove(uuid);
-            OngoingMatchDao.getInstance().put(uuid, updated);
+            MatchScoreModelDao.getInstance().remove(uuid);
+            MatchScoreModelDao.getInstance().put(uuid, updated);
         }
     }
 
     public void updateSet(UUID uuid, Long playerId) {
-        OngoingMatch match = OngoingMatchDao.getInstance().getMatch(uuid);
+        MatchScoreModel match = MatchScoreModelDao.getInstance().getModel(uuid);
         Long player1Id = match.getPlayer1Id();
         Long player2Id = match.getPlayer2Id();
 
         if (player1Id.equals(playerId)) {
-            OngoingMatch updated = new OngoingMatch(uuid,
+            MatchScoreModel updated = new MatchScoreModel(uuid,
                     match.getPlayer1Id(),
                     match.getPlayer2Id(),
                     START_SCORE,
@@ -129,11 +141,11 @@ public class MatchScoreCalculationService {
                     match.getPlayer1Set() + 1,
                     match.getPlayer2Set());
 
-            OngoingMatchDao.getInstance().remove(uuid);
-            OngoingMatchDao.getInstance().put(uuid, updated);
+            MatchScoreModelDao.getInstance().remove(uuid);
+            MatchScoreModelDao.getInstance().put(uuid, updated);
         }
         if (player2Id.equals(playerId)) {
-            OngoingMatch updated = new OngoingMatch(uuid,
+            MatchScoreModel updated = new MatchScoreModel(uuid,
                     match.getPlayer1Id(),
                     match.getPlayer2Id(),
                     START_SCORE,
@@ -143,8 +155,8 @@ public class MatchScoreCalculationService {
                     match.getPlayer1Set(),
                     match.getPlayer2Set() + 1);
 
-            OngoingMatchDao.getInstance().remove(uuid);
-            OngoingMatchDao.getInstance().put(uuid, updated);
+            MatchScoreModelDao.getInstance().remove(uuid);
+            MatchScoreModelDao.getInstance().put(uuid, updated);
         }
     }
 
@@ -154,6 +166,18 @@ public class MatchScoreCalculationService {
 
     private boolean isGameFinished(int games) {
         return games >= MAX_GAMES;
+    }
+
+    private boolean isSetFinished(int games) {
+        return games == MAX_SETS;
+    }
+
+    private Match createFinishedMatch(UUID uuid, Long winnerId) {
+        MatchScoreModel model = MatchScoreModelDao.getInstance().getModel(uuid);
+        Player player1 = playerDao.findById(model.getPlayer1Id());
+        Player player2 = playerDao.findById(model.getPlayer2Id());
+        Player winner = playerDao.findById(winnerId);
+        return new Match(player1, player2, winner);
     }
 
 }

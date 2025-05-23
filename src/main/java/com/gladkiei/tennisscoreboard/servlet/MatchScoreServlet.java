@@ -1,8 +1,8 @@
 package com.gladkiei.tennisscoreboard.servlet;
 
-import com.gladkiei.tennisscoreboard.dao.OngoingMatchDao;
+import com.gladkiei.tennisscoreboard.dao.MatchScoreModelDao;
 import com.gladkiei.tennisscoreboard.dao.PlayerDao;
-import com.gladkiei.tennisscoreboard.models.OngoingMatch;
+import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
 import com.gladkiei.tennisscoreboard.service.MatchScoreCalculationService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -21,7 +21,7 @@ public class MatchScoreServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UUID uuid = UUID.fromString(req.getParameter("uuid"));
-        OngoingMatch match = OngoingMatchDao.getInstance().getMatch(uuid);
+        MatchScoreModel match = MatchScoreModelDao.getInstance().getModel(uuid);
 
         setAllAttributes(req, uuid, match);
 
@@ -35,7 +35,7 @@ public class MatchScoreServlet extends HttpServlet {
         long id = Long.parseLong(playerId);
 
         UUID uuid = UUID.fromString(req.getParameter("uuid"));
-        OngoingMatch match = OngoingMatchDao.getInstance().getMatch(uuid);
+        MatchScoreModel match = MatchScoreModelDao.getInstance().getModel(uuid);
 
         matchScoreCalculationService.updateScore(uuid, id);
 
@@ -43,7 +43,7 @@ public class MatchScoreServlet extends HttpServlet {
 
     }
 
-    private void setAllAttributes(HttpServletRequest req, UUID uuid, OngoingMatch match) {
+    private void setAllAttributes(HttpServletRequest req, UUID uuid, MatchScoreModel match) {
         req.setAttribute("uuid", uuid.toString());
         req.setAttribute("player1", playerDao.findById(match.getPlayer1Id()));
         req.setAttribute("player2", playerDao.findById(match.getPlayer2Id()));

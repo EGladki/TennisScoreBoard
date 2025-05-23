@@ -1,6 +1,6 @@
 package com.gladkiei.tennisscoreboard;
 
-import com.gladkiei.tennisscoreboard.dao.OngoingMatchDao;
+import com.gladkiei.tennisscoreboard.dao.MatchScoreModelDao;
 
 import java.util.UUID;
 
@@ -22,11 +22,11 @@ public class TestApp {
 //        HibernateUtils.shutdown();
 
 
-        OngoingMatchDao storage = OngoingMatchDao.getInstance();
+        MatchScoreModelDao storage = MatchScoreModelDao.getInstance();
 
         UUID uuid = UUID.randomUUID();
 //        storage.put(uuid, new OngoingMatch(1L, new Player("Bob"), new Player("Tom"), 1L, 2L));
-        System.out.println(storage.getMatch(uuid));
+        System.out.println(storage.getModel(uuid));
     }
 
 }

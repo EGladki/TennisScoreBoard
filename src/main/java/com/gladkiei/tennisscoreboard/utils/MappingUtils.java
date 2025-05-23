@@ -2,6 +2,7 @@ package com.gladkiei.tennisscoreboard.utils;
 
 import com.gladkiei.tennisscoreboard.dto.PlayerRequestDto;
 import com.gladkiei.tennisscoreboard.dto.PlayerResponseDto;
+import com.gladkiei.tennisscoreboard.models.Match;
 import com.gladkiei.tennisscoreboard.models.Player;
 import org.modelmapper.ModelMapper;
 
@@ -15,5 +16,6 @@ public class MappingUtils {
     public static PlayerResponseDto convertToDto(Player player) {
         return MODEL_MAPPER.map(player, PlayerResponseDto.class);
     }
+
 
 }

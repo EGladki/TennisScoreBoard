@@ -1,8 +1,8 @@
 package com.gladkiei.tennisscoreboard.service;
 
-import com.gladkiei.tennisscoreboard.models.OngoingMatch;
+import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
 import com.gladkiei.tennisscoreboard.models.Player;
-import com.gladkiei.tennisscoreboard.dao.OngoingMatchDao;
+import com.gladkiei.tennisscoreboard.dao.MatchScoreModelDao;
 
 import java.util.UUID;
 
@@ -11,20 +11,20 @@ public class OngoingMatchService {
     static final int START_GAME = 0;
     static final int START_SET = 0;
 
-    public OngoingMatch startMatch(Player player1, Player player2) {
-        OngoingMatch ongoingMatch = createOngoingMatch(player1, player2);
-        addToStorage(ongoingMatch);
-        return ongoingMatch;
+    public MatchScoreModel startMatch(Player player1, Player player2) {
+        MatchScoreModel matchScoreModel = createOngoingMatch(player1, player2);
+        addToStorage(matchScoreModel);
+        return matchScoreModel;
     }
 
-    private OngoingMatch createOngoingMatch(Player player1, Player player2) {
-        return new OngoingMatch(player1.getId(), player2.getId(), START_SCORE, START_SCORE, START_GAME, START_GAME, START_SET, START_SET);
+    private MatchScoreModel createOngoingMatch(Player player1, Player player2) {
+        return new MatchScoreModel(player1.getId(), player2.getId(), START_SCORE, START_SCORE, START_GAME, START_GAME, START_SET, START_SET);
     }
 
-    private void addToStorage(OngoingMatch ongoingMatch) {
+    private void addToStorage(MatchScoreModel matchScoreModel) {
         UUID uuid = UUID.randomUUID();
-        ongoingMatch.setUuid(uuid);
-        OngoingMatchDao.getInstance().put(uuid, ongoingMatch);
+        matchScoreModel.setUuid(uuid);
+        MatchScoreModelDao.getInstance().put(uuid, matchScoreModel);
     }
 
 

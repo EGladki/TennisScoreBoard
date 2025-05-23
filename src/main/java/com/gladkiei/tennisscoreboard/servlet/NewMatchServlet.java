@@ -2,7 +2,7 @@ package com.gladkiei.tennisscoreboard.servlet;
 
 import com.gladkiei.tennisscoreboard.dao.PlayerDao;
 import com.gladkiei.tennisscoreboard.dto.PlayerRequestDto;
-import com.gladkiei.tennisscoreboard.models.OngoingMatch;
+import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
 import com.gladkiei.tennisscoreboard.models.Player;
 import com.gladkiei.tennisscoreboard.service.OngoingMatchService;
 import jakarta.servlet.ServletException;
@@ -27,13 +27,12 @@ public class NewMatchServlet extends HttpServlet {
 
         // Проверить, есть ли в базе игрок
         // Создать если нет, выбрать если есть
-        // Создать экземляр класса ОнгоингМатча и
 
         Player player1 = playerDao.save(new PlayerRequestDto(first));
         Player player2 = playerDao.save(new PlayerRequestDto(second));
 
-        OngoingMatch ongoingMatch = ongoingMatchService.startMatch(player1, player2);
-        UUID uuid = ongoingMatch.getUuid();
+        MatchScoreModel matchScoreModel = ongoingMatchService.startMatch(player1, player2);
+        UUID uuid = matchScoreModel.getUuid();
 
         resp.sendRedirect("match-score" + "?uuid=" + uuid );
 //        req.getRequestDispatcher("/match-score.jsp").forward(req, resp);

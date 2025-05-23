@@ -1,7 +1,14 @@
 package com.gladkiei.tennisscoreboard.service;
 
-public class FinishedMatchesPersistenceService {
+import com.gladkiei.tennisscoreboard.dao.MatchDao;
+import com.gladkiei.tennisscoreboard.models.Match;
 
+public class FinishedMatchesPersistenceService {
+    private final MatchDao matchDao = new MatchDao();
+
+    protected void save(Match match) {
+        matchDao.save(match);
+    }
     // инкапсуляция готовых матчей в БД
     // если матч закончился -> сохранить в БД
 }
