@@ -51,6 +51,5 @@
     </c:forEach>
 </ul>
 
-<%--<a href="new-match.jsp">➕ Добавить новых игроков</a>--%>
 </body>
 </html>

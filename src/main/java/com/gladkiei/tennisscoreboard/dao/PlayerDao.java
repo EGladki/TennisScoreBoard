@@ -7,10 +7,18 @@ import com.gladkiei.tennisscoreboard.utils.MappingUtils;
 import org.hibernate.Session;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public class PlayerDao {
 
+    public Player getPlayer(String playerName) {
+        if (isAlreadyExist(playerName)) {
+            return findByName(playerName).get();
+        } else {
+            return save(new PlayerRequestDto(playerName));
+        }
+    }
 
     public Player save(PlayerRequestDto requestDto) {
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
@@ -34,5 +42,19 @@ public class PlayerDao {
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
             return session.find(Player.class, id);
         }
+    }
+
+    public Optional<Player> findByName(String name) {
+        try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            return (session.createQuery("FROM Player WHERE name=:name", Player.class)
+                    .setParameter("name", name)
+                    .uniqueResultOptional());
+        }
+    }
+
+    public boolean isAlreadyExist(String player) {
+        Optional<Player> optional = findByName(player);
+        return optional.isPresent();
     }
 }

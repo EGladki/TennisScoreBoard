@@ -22,14 +22,11 @@ public class NewMatchServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        String first = req.getParameter("player1");
-        String second = req.getParameter("player2");
+        String firstPlayerName = req.getParameter("player1");
+        String secondPlayerName = req.getParameter("player2");
 
-        // Проверить, есть ли в базе игрок
-        // Создать если нет, выбрать если есть
-
-        Player player1 = playerDao.save(new PlayerRequestDto(first));
-        Player player2 = playerDao.save(new PlayerRequestDto(second));
+        Player player1 = playerDao.getPlayer(firstPlayerName);
+        Player player2 = playerDao.getPlayer(secondPlayerName);
 
         MatchScoreModel matchScoreModel = ongoingMatchService.startMatch(player1, player2);
         UUID uuid = matchScoreModel.getUuid();
@@ -38,5 +35,8 @@ public class NewMatchServlet extends HttpServlet {
 //        req.getRequestDispatcher("/match-score.jsp").forward(req, resp);
 
     }
+
 }
+
+
 

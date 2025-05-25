@@ -25,7 +25,6 @@ public class MatchScoreServlet extends HttpServlet {
 
         setAllAttributes(req, uuid, match);
 
-        System.out.println(match);
         req.getRequestDispatcher("/match-score.jsp").forward(req, resp);
     }
 

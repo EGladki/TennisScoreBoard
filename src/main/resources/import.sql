@@ -13,6 +13,8 @@ INSERT INTO player (name) VALUES ('Matteo Berrettini');
 INSERT INTO player (name) VALUES ('Nick Kyrgios');
 INSERT INTO player (name) VALUES ('Andrey Rublev');
 INSERT INTO player (name) VALUES ('Taylor Fritz');
+INSERT INTO player (name) VALUES ('Bob');
+INSERT INTO player (name) VALUES ('Tom');
 
 INSERT INTO matches (player1_id, player2_id, winner_id) VALUES (1, 2, 1);
 INSERT INTO matches (player1_id, player2_id, winner_id) VALUES (3, 4, 3);

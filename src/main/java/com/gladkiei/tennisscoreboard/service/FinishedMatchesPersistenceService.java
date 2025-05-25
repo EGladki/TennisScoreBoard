@@ -9,6 +9,7 @@ public class FinishedMatchesPersistenceService {
     protected void save(Match match) {
         matchDao.save(match);
     }
+
+
     // инкапсуляция готовых матчей в БД
-    // если матч закончился -> сохранить в БД
 }

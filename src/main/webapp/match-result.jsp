@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Новый матч</title>
+    <title>Матч закончен</title>
     <style>
         body {
             background-color: #121212;
@@ -52,15 +52,10 @@
 </head>
 <body>
 <h1>Создать матч</h1>
-<form method="post" action="new-match">
-    <label>Игрок 1:
-        <input type="text" name="player1" required>
-    </label>
-    <label>Игрок 2:
-        <input type="text" name="player2" required>
-    </label>
-    <button type="submit">Добавить игроков</button>
+<form method="get" action="new-match">
+
 </form>
+<a href="index.jsp">Начать новый матч</a>
 <a href="matches">Список матчей</a>
 <a href="players">Список игроков</a>
 </body>
