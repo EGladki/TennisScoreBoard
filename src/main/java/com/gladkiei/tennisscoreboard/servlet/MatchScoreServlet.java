@@ -44,13 +44,13 @@ public class MatchScoreServlet extends HttpServlet {
 
     private void setAllAttributes(HttpServletRequest req, UUID uuid, MatchScoreModel match) {
         req.setAttribute("uuid", uuid.toString());
-        req.setAttribute("player1", playerDao.findById(match.getPlayer1Id()));
-        req.setAttribute("player2", playerDao.findById(match.getPlayer2Id()));
-        req.setAttribute("player1Score", match.getPlayer1Score());
-        req.setAttribute("player2Score", match.getPlayer2Score());
-        req.setAttribute("player1Game", match.getPlayer1Game());
-        req.setAttribute("player2Game", match.getPlayer2Game());
-        req.setAttribute("player1Set", match.getPlayer1Set());
-        req.setAttribute("player2Set", match.getPlayer2Set());
+        req.setAttribute("player1", playerDao.findById(match.getPlayer1ScoreModel().getPlayerId()));
+        req.setAttribute("player2", playerDao.findById(match.getPlayer2ScoreModel().getPlayerId()));
+        req.setAttribute("player1Score", match.getPlayer1ScoreModel().getPlayerScore());
+        req.setAttribute("player2Score", match.getPlayer2ScoreModel().getPlayerScore());
+        req.setAttribute("player1Game", match.getPlayer1ScoreModel().getPlayerGame());
+        req.setAttribute("player2Game", match.getPlayer2ScoreModel().getPlayerGame());
+        req.setAttribute("player1Set", match.getPlayer1ScoreModel().getPlayerSet());
+        req.setAttribute("player2Set", match.getPlayer2ScoreModel().getPlayerSet());
     }
 }

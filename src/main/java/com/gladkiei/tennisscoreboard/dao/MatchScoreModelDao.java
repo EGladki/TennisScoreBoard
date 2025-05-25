@@ -2,6 +2,7 @@ package com.gladkiei.tennisscoreboard.dao;
 
 import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
 
+import java.util.AbstractMap;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -17,17 +18,17 @@ public class MatchScoreModelDao {
 
     private final static ConcurrentHashMap<UUID, MatchScoreModel> ongoingMatches = new ConcurrentHashMap<>();
 
-    public void refresh(UUID uuid, MatchScoreModel model) {
-        MatchScoreModelDao.getInstance().remove(uuid);
-        MatchScoreModelDao.getInstance().put(uuid, model);
-    }
-
     public void put(UUID uuid, MatchScoreModel model) {
         ongoingMatches.put(uuid, model);
     }
 
     public MatchScoreModel getModel(UUID uuid) {
         return ongoingMatches.get(uuid);
+    }
+
+    //delete this
+    public AbstractMap<UUID, MatchScoreModel> getAll() {
+        return ongoingMatches;
     }
 
     public void remove(UUID uuid) {

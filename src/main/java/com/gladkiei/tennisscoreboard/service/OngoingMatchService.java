@@ -1,8 +1,9 @@
 package com.gladkiei.tennisscoreboard.service;
 
+import com.gladkiei.tennisscoreboard.dao.MatchScoreModelDao;
 import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
 import com.gladkiei.tennisscoreboard.models.Player;
-import com.gladkiei.tennisscoreboard.dao.MatchScoreModelDao;
+import com.gladkiei.tennisscoreboard.models.PlayerScoreModel;
 
 import java.util.UUID;
 
@@ -20,7 +21,9 @@ public class OngoingMatchService {
     }
 
     private MatchScoreModel createOngoingMatch(Player player1, Player player2) {
-        return new MatchScoreModel(player1.getId(), player2.getId(), START_SCORE, START_SCORE, START_GAME, START_GAME, START_SET, START_SET, NOT_COMPLETED);
+        PlayerScoreModel model1 = new PlayerScoreModel(player1.getId(), START_SCORE, START_GAME, START_SET);
+        PlayerScoreModel model2 = new PlayerScoreModel(player2.getId(), START_SCORE, START_GAME, START_SET);
+        return new MatchScoreModel(model1, model2, NOT_COMPLETED);
     }
 
     private void addToStorage(MatchScoreModel matchScoreModel) {

@@ -1,7 +1,6 @@
 package com.gladkiei.tennisscoreboard.servlet;
 
 import com.gladkiei.tennisscoreboard.dao.PlayerDao;
-import com.gladkiei.tennisscoreboard.dto.PlayerRequestDto;
 import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
 import com.gladkiei.tennisscoreboard.models.Player;
 import com.gladkiei.tennisscoreboard.service.OngoingMatchService;
