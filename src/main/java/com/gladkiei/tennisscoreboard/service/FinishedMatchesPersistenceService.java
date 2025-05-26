@@ -10,6 +10,8 @@ public class FinishedMatchesPersistenceService {
         matchDao.save(match);
     }
 
-
+    public Long getFinishedMatchId(Match match) {
+        return match.getId();
+    }
     // инкапсуляция готовых матчей в БД
 }

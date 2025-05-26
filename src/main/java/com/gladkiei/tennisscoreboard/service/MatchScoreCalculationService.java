@@ -14,7 +14,7 @@ import static com.gladkiei.tennisscoreboard.service.OngoingMatchService.*;
 public class MatchScoreCalculationService {
     private final static int MAX_SCORE = 40;
     private final static int MAX_GAMES = 6;
-    private final static int MAX_SETS = 2;
+    private final static int MAX_SETS = 1; // todo fix -> 2
     private final static int ZERO = 0;
     private final static int ONE_POINT = 1;
     private final static int FIRST_ADDING_SCORE = 15;
@@ -22,11 +22,18 @@ public class MatchScoreCalculationService {
     private final static int FINAL_ADDING_SCORE = 10;
     private final MatchScoreModelDao matchScoreModelDao = new MatchScoreModelDao();
     private final PlayerDao playerDao = new PlayerDao();
-    private final FinishedMatchesPersistenceService finishedMatchesPersistenceService = new FinishedMatchesPersistenceService();
+    private final FinishedMatchesPersistenceService finishedMatchesPersistenceService =
+            new FinishedMatchesPersistenceService();
 
     public void updateScore(UUID uuid, Long winnerId) {
         givePlayerScore(uuid, winnerId);
+        MatchScoreModel matchScoreModel = matchScoreModelDao.getModel(uuid);
 
+        if (isCompleted(matchScoreModel)) {
+            Match finishedMatch = createCompletedMatch(uuid, winnerId);
+            finishedMatchesPersistenceService.save(finishedMatch);
+            matchScoreModelDao.remove(uuid);
+        }
     }
 
     private void givePlayerScore(UUID uuid, Long winnerId) {
@@ -36,16 +43,11 @@ public class MatchScoreCalculationService {
         int score = calculateAddingScore(winner.getPlayerScore());
         winner.setPlayerScore(winner.getPlayerScore() + score);
 
-
         if (isMatchFinished(winner.getPlayerScore())) {
             updateGame(uuid, winnerId);
             if (isGameFinished(winner.getPlayerGame())) {
                 updateSet(uuid, winnerId);
-                if (isCompleted(matchScoreModel)) {
-                    Match finishedMatch = createCompletedMatch(uuid, winnerId);
-                    finishedMatchesPersistenceService.save(finishedMatch); // delete from ongoing matches
 
-                }
             }
         }
     }
@@ -59,7 +61,6 @@ public class MatchScoreCalculationService {
         winner.setPlayerGame(winner.getPlayerGame() + ONE_POINT);
 
         loser.setPlayerScore(START_SCORE);
-
     }
 
     public void updateSet(UUID uuid, Long winnerId) {
@@ -75,7 +76,6 @@ public class MatchScoreCalculationService {
         if (isSetFinished(winner.getPlayerSet())) {
             match.setState(COMPLETED);
         }
-
         loser.setPlayerScore(START_SCORE);
         loser.setPlayerGame(START_GAME);
     }

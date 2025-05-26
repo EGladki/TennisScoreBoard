@@ -51,6 +51,18 @@
     </style>
 </head>
 <body>
+<table>
+    <tr>
+        <th>Игрок</th>
+    </tr>
+    <tr>
+        <td>${player1.name}</td>
+    </tr>
+    <tr>
+        <td>${player2.name}</td>
+    </tr>
+</table>
+
 <h1>Создать матч</h1>
 <form method="get" action="new-match">
 

@@ -25,7 +25,12 @@ public class MatchScoreServlet extends HttpServlet {
 
         setAllAttributes(req, uuid, match);
 
-        req.getRequestDispatcher("/match-score.jsp").forward(req, resp);
+        if (!match.isState()) {
+            req.getRequestDispatcher("/match-score.jsp").forward(req, resp);
+        } else {
+            setAllAttributes(req, uuid, match);
+            req.getRequestDispatcher("/match-result.jsp").forward(req, resp);
+        }
     }
 
     @Override
@@ -34,7 +39,7 @@ public class MatchScoreServlet extends HttpServlet {
         long id = Long.parseLong(playerId);
 
         UUID uuid = UUID.fromString(req.getParameter("uuid"));
-        MatchScoreModel match = MatchScoreModelDao.getInstance().getModel(uuid);
+//        MatchScoreModel match = MatchScoreModelDao.getInstance().getModel(uuid);
 
         matchScoreCalculationService.updateScore(uuid, id);
 

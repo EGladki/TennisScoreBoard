@@ -8,7 +8,7 @@ import org.hibernate.cfg.Configuration;
 
 public class HibernateUtils {
 
-    private static final SessionFactory sessionFactory  = buildSessionFactory();
+    private static final SessionFactory sessionFactory = buildSessionFactory();
 
     private static SessionFactory buildSessionFactory() {
 
@@ -23,7 +23,7 @@ public class HibernateUtils {
     }
 
     public static SessionFactory getSessionFactory() {
-        return sessionFactory ;
+        return sessionFactory;
     }
 
     public static void shutdown() {
