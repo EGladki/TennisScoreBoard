@@ -2,6 +2,7 @@ package com.gladkiei.tennisscoreboard.servlet;
 
 import com.gladkiei.tennisscoreboard.dao.MatchScoreModelDao;
 import com.gladkiei.tennisscoreboard.dao.PlayerDao;
+import com.gladkiei.tennisscoreboard.models.Match;
 import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
 import com.gladkiei.tennisscoreboard.service.MatchScoreCalculationService;
 import jakarta.servlet.ServletException;
@@ -17,15 +18,17 @@ import java.util.UUID;
 public class MatchScoreServlet extends HttpServlet {
     private final PlayerDao playerDao = new PlayerDao();
     private final MatchScoreCalculationService matchScoreCalculationService = new MatchScoreCalculationService();
+    private final MatchScoreModelDao matchScoreModelDao = new MatchScoreModelDao();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UUID uuid = UUID.fromString(req.getParameter("uuid"));
-        MatchScoreModel match = MatchScoreModelDao.getInstance().getModel(uuid);
+        MatchScoreModel matchScoreModel = MatchScoreModelDao.getInstance().getModel(uuid);
 
-        setAllAttributes(req, uuid, match);
+        setAllAttributes(req, uuid, matchScoreModel);
 
-        if (!match.isState()) {
+        if (!matchScoreModel.isState()) {
+
             req.getRequestDispatcher("/match-score.jsp").forward(req, resp);
         } else {
             setAllAttributes(req, uuid, match);
@@ -47,15 +50,15 @@ public class MatchScoreServlet extends HttpServlet {
 
     }
 
-    private void setAllAttributes(HttpServletRequest req, UUID uuid, MatchScoreModel match) {
+    private void setAllAttributes(HttpServletRequest req, UUID uuid, MatchScoreModel matchScoreModel) {
         req.setAttribute("uuid", uuid.toString());
-        req.setAttribute("player1", playerDao.findById(match.getPlayer1ScoreModel().getPlayerId()));
-        req.setAttribute("player2", playerDao.findById(match.getPlayer2ScoreModel().getPlayerId()));
-        req.setAttribute("player1Score", match.getPlayer1ScoreModel().getPlayerScore());
-        req.setAttribute("player2Score", match.getPlayer2ScoreModel().getPlayerScore());
-        req.setAttribute("player1Game", match.getPlayer1ScoreModel().getPlayerGame());
-        req.setAttribute("player2Game", match.getPlayer2ScoreModel().getPlayerGame());
-        req.setAttribute("player1Set", match.getPlayer1ScoreModel().getPlayerSet());
-        req.setAttribute("player2Set", match.getPlayer2ScoreModel().getPlayerSet());
+        req.setAttribute("player1", playerDao.findById(matchScoreModel.getPlayer1ScoreModel().getPlayerId()));
+        req.setAttribute("player2", playerDao.findById(matchScoreModel.getPlayer2ScoreModel().getPlayerId()));
+        req.setAttribute("player1Score", matchScoreModel.getPlayer1ScoreModel().getPlayerScore());
+        req.setAttribute("player2Score", matchScoreModel.getPlayer2ScoreModel().getPlayerScore());
+        req.setAttribute("player1Game", matchScoreModel.getPlayer1ScoreModel().getPlayerGame());
+        req.setAttribute("player2Game", matchScoreModel.getPlayer2ScoreModel().getPlayerGame());
+        req.setAttribute("player1Set", matchScoreModel.getPlayer1ScoreModel().getPlayerSet());
+        req.setAttribute("player2Set", matchScoreModel.getPlayer2ScoreModel().getPlayerSet());
     }
 }

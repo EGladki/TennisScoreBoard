@@ -21,19 +21,11 @@ public class MatchScoreCalculationService {
     private final static int SECOND_ADDING_SCORE = 15;
     private final static int FINAL_ADDING_SCORE = 10;
     private final MatchScoreModelDao matchScoreModelDao = new MatchScoreModelDao();
-    private final PlayerDao playerDao = new PlayerDao();
-    private final FinishedMatchesPersistenceService finishedMatchesPersistenceService =
-            new FinishedMatchesPersistenceService();
+    private final FinishedMatchesPersistenceService finishedMatchesPersistenceService = new FinishedMatchesPersistenceService();
 
     public void updateScore(UUID uuid, Long winnerId) {
         givePlayerScore(uuid, winnerId);
-        MatchScoreModel matchScoreModel = matchScoreModelDao.getModel(uuid);
 
-        if (isCompleted(matchScoreModel)) {
-            Match finishedMatch = createCompletedMatch(uuid, winnerId);
-            finishedMatchesPersistenceService.save(finishedMatch);
-            matchScoreModelDao.remove(uuid);
-        }
     }
 
     private void givePlayerScore(UUID uuid, Long winnerId) {
@@ -120,18 +112,6 @@ public class MatchScoreCalculationService {
 
     private boolean isSetFinished(int sets) {
         return sets == MAX_SETS;
-    }
-
-    private boolean isCompleted(MatchScoreModel model) {
-        return model.isState() == COMPLETED;
-    }
-
-    private Match createCompletedMatch(UUID uuid, Long winnerId) {
-        MatchScoreModel model = MatchScoreModelDao.getInstance().getModel(uuid);
-        Player player1 = playerDao.findById(model.getPlayer1ScoreModel().getPlayerId());
-        Player player2 = playerDao.findById(model.getPlayer2ScoreModel().getPlayerId());
-        Player winner = playerDao.findById(winnerId);
-        return new Match(player1, player2, winner);
     }
 
 }
