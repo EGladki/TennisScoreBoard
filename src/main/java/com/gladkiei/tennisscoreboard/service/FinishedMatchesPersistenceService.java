@@ -16,24 +16,14 @@ public class FinishedMatchesPersistenceService {
     private final PlayerDao playerDao = new PlayerDao();
     private final MatchScoreModelDao matchScoreModelDao = new MatchScoreModelDao();
 
-    public void getFinishedMatch(UUID uuid) {
+    public Match getSavedMatch(UUID uuid) {
         MatchScoreModel matchScoreModel = matchScoreModelDao.getModel(uuid);
+        Long winnerId = getWinnerId(matchScoreModel);
 
-        // invoke updateScore() from calcService and when match COMPLETED -> return new Match
-
-        if (isCompleted(matchScoreModel)) {
-            Match finishedMatch = createCompletedMatch(uuid, winnerId);
-            matchDao.save(finishedMatch);
-            matchScoreModelDao.remove(uuid);
-        }
-    }
-
-    public Long getFinishedMatchId(Match match) {
-        return match.getId();
-    }
-
-    private boolean isCompleted(MatchScoreModel model) {
-        return model.isState() == COMPLETED;
+        Match finishedMatch = createCompletedMatch(uuid, winnerId);
+        matchDao.save(finishedMatch);
+        matchScoreModelDao.removeModel(uuid);
+        return finishedMatch;
     }
 
     private Match createCompletedMatch(UUID uuid, Long winnerId) {
@@ -44,5 +34,11 @@ public class FinishedMatchesPersistenceService {
         return new Match(player1, player2, winner);
     }
 
-    // инкапсуляция готовых матчей в БД
+    private Long getWinnerId(MatchScoreModel matchScoreModel) {
+        if (matchScoreModel.getPlayer1ScoreModel().isWinner()) {
+            return matchScoreModel.getPlayer1ScoreModel().getPlayerId();
+        } else {
+            return matchScoreModel.getPlayer2ScoreModel().getPlayerId();
+        }
+    }
 }

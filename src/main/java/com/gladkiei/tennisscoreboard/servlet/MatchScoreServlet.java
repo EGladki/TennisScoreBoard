@@ -4,7 +4,9 @@ import com.gladkiei.tennisscoreboard.dao.MatchScoreModelDao;
 import com.gladkiei.tennisscoreboard.dao.PlayerDao;
 import com.gladkiei.tennisscoreboard.models.Match;
 import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
+import com.gladkiei.tennisscoreboard.service.FinishedMatchesPersistenceService;
 import com.gladkiei.tennisscoreboard.service.MatchScoreCalculationService;
+import com.gladkiei.tennisscoreboard.service.OngoingMatchService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,21 +20,20 @@ import java.util.UUID;
 public class MatchScoreServlet extends HttpServlet {
     private final PlayerDao playerDao = new PlayerDao();
     private final MatchScoreCalculationService matchScoreCalculationService = new MatchScoreCalculationService();
-    private final MatchScoreModelDao matchScoreModelDao = new MatchScoreModelDao();
+    private final FinishedMatchesPersistenceService finishedMatchesPersistenceService = new FinishedMatchesPersistenceService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UUID uuid = UUID.fromString(req.getParameter("uuid"));
         MatchScoreModel matchScoreModel = MatchScoreModelDao.getInstance().getModel(uuid);
 
-        setAllAttributes(req, uuid, matchScoreModel);
-
-        if (!matchScoreModel.isState()) {
-
-            req.getRequestDispatcher("/match-score.jsp").forward(req, resp);
+        if (isCompleted(matchScoreModel)) {
+            Match match = finishedMatchesPersistenceService.getSavedMatch(uuid);
+            setAllAttributesForMatch(req, match);
+            req.getRequestDispatcher("/finished-match.jsp").forward(req, resp);
         } else {
-            setAllAttributes(req, uuid, match);
-            req.getRequestDispatcher("/match-result.jsp").forward(req, resp);
+            setAllAttributesForModel(req, uuid, matchScoreModel);
+            req.getRequestDispatcher("/match-score.jsp").forward(req, resp);
         }
     }
 
@@ -42,15 +43,13 @@ public class MatchScoreServlet extends HttpServlet {
         long id = Long.parseLong(playerId);
 
         UUID uuid = UUID.fromString(req.getParameter("uuid"));
-//        MatchScoreModel match = MatchScoreModelDao.getInstance().getModel(uuid);
-
         matchScoreCalculationService.updateScore(uuid, id);
 
         resp.sendRedirect("match-score" + "?uuid=" + uuid);
 
     }
 
-    private void setAllAttributes(HttpServletRequest req, UUID uuid, MatchScoreModel matchScoreModel) {
+    private void setAllAttributesForModel(HttpServletRequest req, UUID uuid, MatchScoreModel matchScoreModel) {
         req.setAttribute("uuid", uuid.toString());
         req.setAttribute("player1", playerDao.findById(matchScoreModel.getPlayer1ScoreModel().getPlayerId()));
         req.setAttribute("player2", playerDao.findById(matchScoreModel.getPlayer2ScoreModel().getPlayerId()));
@@ -60,5 +59,15 @@ public class MatchScoreServlet extends HttpServlet {
         req.setAttribute("player2Game", matchScoreModel.getPlayer2ScoreModel().getPlayerGame());
         req.setAttribute("player1Set", matchScoreModel.getPlayer1ScoreModel().getPlayerSet());
         req.setAttribute("player2Set", matchScoreModel.getPlayer2ScoreModel().getPlayerSet());
+    }
+
+    private void setAllAttributesForMatch(HttpServletRequest req, Match match) {
+        req.setAttribute("player1", match.getPlayer1());
+        req.setAttribute("player2", match.getPlayer2());
+        req.setAttribute("winner", match.getWinner());
+    }
+
+    public boolean isCompleted(MatchScoreModel matchScoreModel) {
+        return matchScoreModel.isState();
     }
 }

@@ -13,6 +13,10 @@ public class OngoingMatchService {
     static final int START_SET = 0;
     static final boolean NOT_COMPLETED = false;
     static final boolean COMPLETED = true;
+    static final boolean NOT_WINNER = false;
+    static final boolean WINNER = true;
+    static final boolean NOT_DEUCE = false;
+    static final boolean DEUCE = true;
 
     public MatchScoreModel startMatch(Player player1, Player player2) {
         MatchScoreModel matchScoreModel = createOngoingMatch(player1, player2);
@@ -21,9 +25,9 @@ public class OngoingMatchService {
     }
 
     private MatchScoreModel createOngoingMatch(Player player1, Player player2) {
-        PlayerScoreModel model1 = new PlayerScoreModel(player1.getId(), START_SCORE, START_GAME, START_SET);
-        PlayerScoreModel model2 = new PlayerScoreModel(player2.getId(), START_SCORE, START_GAME, START_SET);
-        return new MatchScoreModel(model1, model2, NOT_COMPLETED);
+        PlayerScoreModel model1 = new PlayerScoreModel(player1.getId(), START_SCORE, START_GAME, START_SET, NOT_WINNER);
+        PlayerScoreModel model2 = new PlayerScoreModel(player2.getId(), START_SCORE, START_GAME, START_SET, NOT_WINNER);
+        return new MatchScoreModel(model1, model2, NOT_DEUCE, NOT_COMPLETED);
     }
 
     private void addToStorage(MatchScoreModel matchScoreModel) {

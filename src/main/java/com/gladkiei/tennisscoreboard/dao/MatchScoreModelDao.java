@@ -2,7 +2,6 @@ package com.gladkiei.tennisscoreboard.dao;
 
 import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
 
-import java.util.AbstractMap;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -26,12 +25,7 @@ public class MatchScoreModelDao {
         return ongoingMatches.get(uuid);
     }
 
-    //delete this
-    public AbstractMap<UUID, MatchScoreModel> getAll() {
-        return ongoingMatches;
-    }
-
-    public void remove(UUID uuid) {
+    public void removeModel(UUID uuid) {
         ongoingMatches.remove(uuid);
     }
 

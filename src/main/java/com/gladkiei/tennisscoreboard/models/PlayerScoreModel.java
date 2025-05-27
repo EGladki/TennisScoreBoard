@@ -13,5 +13,6 @@ public class PlayerScoreModel {
     private int playerScore;
     private int playerGame;
     private int playerSet;
+    private boolean isWinner;
 
 }
