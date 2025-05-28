@@ -11,7 +11,9 @@ import static com.gladkiei.tennisscoreboard.service.OngoingMatchService.*;
 public class MatchScoreCalculationService {
     private final static int MAX_SCORE = 40;
     private final static int MAX_GAMES = 2; // todo fix -> 6
-    private final static int MAX_SETS = 1; // todo fix -> 2
+    private final static int MAX_SETS = 2; // todo fix -> 2
+    private final static int TIEBREAK_SCORE = 1; // todo fix -> 6
+    private final static int DIFFERENCE_IN_SETS_TO_WIN_TIEBREAK = 2;
     private final static int ZERO = 0;
     private final static int ONE_POINT = 1;
     private final static int MORE = 1;
@@ -119,7 +121,9 @@ public class MatchScoreCalculationService {
         winner.setPlayerGame(START_GAME);
         winner.setPlayerSet(winner.getPlayerSet() + ONE_POINT);
 
-        if (isSetFinished(winner.getPlayerSet())) {
+        isTieBreak(uuid); // todo
+
+        if (isSetFinished(uuid, winner.getPlayerSet())) {
             winner.setWinner(WINNER);
             match.setState(COMPLETED);
         }
@@ -127,8 +131,19 @@ public class MatchScoreCalculationService {
         loser.setPlayerGame(START_GAME);
     }
 
-    private boolean isTieBreak() {
-        return true;
+    private boolean isTieBreak(UUID uuid) {
+        MatchScoreModel matchScoreModel = matchScoreModelDao.getModel(uuid);
+        if (matchScoreModel.isTieBreak()) {
+            return true;
+        }
+        int player1Set = matchScoreModel.getPlayer1ScoreModel().getPlayerSet();
+        int player2Set = matchScoreModel.getPlayer2ScoreModel().getPlayerSet();
+        if (player1Set == MAX_GAMES && player2Set == MAX_GAMES) {
+            matchScoreModel.setTieBreak(TIEBREAK);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private PlayerScoreModel getWinner(Long winnerId, MatchScoreModel matchScoreModel) {
@@ -155,7 +170,13 @@ public class MatchScoreCalculationService {
         return games >= MAX_GAMES;
     }
 
-    private boolean isSetFinished(int sets) {
+    private boolean isSetFinished(UUID uuid, int sets) {
+        MatchScoreModel matchScoreModel = matchScoreModelDao.getModel(uuid);
+        if (matchScoreModel.isTieBreak()) {
+            int player1Set = matchScoreModel.getPlayer1ScoreModel().getPlayerSet();
+            int player2Set = matchScoreModel.getPlayer2ScoreModel().getPlayerSet();
+            return ((player2Set - player1Set) == DIFFERENCE_IN_SETS_TO_WIN_TIEBREAK || (player1Set - player2Set) == DIFFERENCE_IN_SETS_TO_WIN_TIEBREAK);
+        }
         return sets == MAX_SETS;
     }
 
