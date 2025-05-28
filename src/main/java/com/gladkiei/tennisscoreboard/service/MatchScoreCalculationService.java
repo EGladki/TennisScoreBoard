@@ -10,7 +10,7 @@ import static com.gladkiei.tennisscoreboard.service.OngoingMatchService.*;
 
 public class MatchScoreCalculationService {
     private final static int MAX_SCORE = 40;
-    private final static int MAX_GAMES = 6;
+    private final static int MAX_GAMES = 2; // todo fix -> 6
     private final static int MAX_SETS = 1; // todo fix -> 2
     private final static int ZERO = 0;
     private final static int ONE_POINT = 1;
@@ -22,12 +22,7 @@ public class MatchScoreCalculationService {
     private final MatchScoreModelDao matchScoreModelDao = new MatchScoreModelDao();
 
     public void updateScore(UUID uuid, Long winnerId) {
-        MatchScoreModel matchScoreModel = matchScoreModelDao.getModel(uuid);
         if (isDeuce(uuid)) {
-
-            matchScoreModel.setDeuce(DEUCE);
-            matchScoreModel.getPlayer1ScoreModel().setPlayerScore(ZERO);
-            matchScoreModel.getPlayer2ScoreModel().setPlayerScore(ZERO);
             givePlayerScoreDeuceRules(uuid, winnerId);
         } else {
             givePlayerScore(uuid, winnerId);
@@ -36,9 +31,24 @@ public class MatchScoreCalculationService {
 
     private boolean isDeuce(UUID uuid) {
         MatchScoreModel matchScoreModel = matchScoreModelDao.getModel(uuid);
+        if (matchScoreModel.isDeuce()) {
+            return true;
+        }
         int playerScore1 = matchScoreModel.getPlayer1ScoreModel().getPlayerScore();
         int playerScore2 = matchScoreModel.getPlayer2ScoreModel().getPlayerScore();
-        return (playerScore1 == MAX_SCORE && playerScore2 == MAX_SCORE);
+        if (playerScore1 == MAX_SCORE && playerScore2 == MAX_SCORE) {
+            matchScoreModel.setDeuce(DEUCE);
+            resetScore(uuid);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void resetScore(UUID uuid) {
+        MatchScoreModel matchScoreModel = matchScoreModelDao.getModel(uuid);
+        matchScoreModel.getPlayer1ScoreModel().setPlayerScore(ZERO);
+        matchScoreModel.getPlayer2ScoreModel().setPlayerScore(ZERO);
     }
 
     private void givePlayerScoreDeuceRules(UUID uuid, Long winnerId) {
@@ -46,13 +56,16 @@ public class MatchScoreCalculationService {
         PlayerScoreModel winner = getWinner(winnerId, matchScoreModel);
         PlayerScoreModel loser = getLoser(winnerId, matchScoreModel);
 
-        // FIX логика неправильная. Сделать счет 0-0, а затем добавлять
-        winner.setPlayerScore(MORE);
-        loser.setPlayerScore(LESS);
+
+        winner.setPlayerScore(winner.getPlayerScore() + MORE);
+        loser.setPlayerScore(loser.getPlayerScore() + LESS);
 
         if (winner.getPlayerScore() > MORE) {
             matchScoreModel.setDeuce(NOT_DEUCE);
-            updateGame(uuid,winnerId);
+            updateGame(uuid, winnerId);
+            if (isGameFinished(winner.getPlayerGame())) {
+                updateSet(uuid, winnerId);
+            }
         }
     }
 
@@ -67,7 +80,6 @@ public class MatchScoreCalculationService {
             updateGame(uuid, winnerId);
             if (isGameFinished(winner.getPlayerGame())) {
                 updateSet(uuid, winnerId);
-
             }
         }
     }
@@ -113,6 +125,10 @@ public class MatchScoreCalculationService {
         }
         loser.setPlayerScore(START_SCORE);
         loser.setPlayerGame(START_GAME);
+    }
+
+    private boolean isTieBreak() {
+        return true;
     }
 
     private PlayerScoreModel getWinner(Long winnerId, MatchScoreModel matchScoreModel) {
