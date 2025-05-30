@@ -8,7 +8,7 @@ import java.util.List;
 
 public class MatchDao {
 
-    public List<Match> findAll() {
+    public List<Match> getAll() {
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
 
             return session.createQuery("""

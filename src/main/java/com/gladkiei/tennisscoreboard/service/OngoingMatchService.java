@@ -8,6 +8,7 @@ import com.gladkiei.tennisscoreboard.models.PlayerScoreModel;
 import java.util.UUID;
 
 public class OngoingMatchService {
+
     static final int START_SCORE = 0;
     static final int START_GAME = 0;
     static final int START_SET = 0;
@@ -37,6 +38,4 @@ public class OngoingMatchService {
         matchScoreModel.setUuid(uuid);
         MatchScoreModelDao.getInstance().put(uuid, matchScoreModel);
     }
-
-
 }
