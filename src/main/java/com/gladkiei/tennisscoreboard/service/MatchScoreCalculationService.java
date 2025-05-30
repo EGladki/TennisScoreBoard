@@ -8,21 +8,30 @@ import java.util.UUID;
 
 import static com.gladkiei.tennisscoreboard.service.OngoingMatchService.*;
 
-public class MatchScoreCalculationService {
+public class MatchScoreCalculationService implements UpdateScore {
     private final static int MAX_SCORE = 40;
-    private final static int MAX_GAMES = 6; // todo fix -> 6
-    private final static int MAX_SETS = 2; // todo fix -> 2
+    private final static int MAX_GAMES = 6;
+    private final static int MAX_SETS = 2;
     private final static int TIEBREAK_SCORE_TO_WIN = 7;
     private final static int DIFFERENCE_IN_SCORES_TO_WIN_TIEBREAK = 2;
     private final static int ZERO = 0;
     private final static int ONE_POINT = 1;
     private final static int MORE = 1;
     private final static int LESS = -1;
-    private final static int FIRST_ADDING_SCORE = 15;
-    private final static int SECOND_ADDING_SCORE = 15;
-    private final static int FINAL_ADDING_SCORE = 10;
+    private final static int FIFTEEN = 15;
+    private final static int TEN = 10;
     private final MatchScoreModelDao matchScoreModelDao = new MatchScoreModelDao();
 
+    @Override
+    public void execute(UUID uuid, Long winnerId) {
+        if (isTieBreak(uuid)) {
+            playTiebreak(uuid, winnerId);
+        } else if (isDeuce(uuid)) {
+            givePlayerScoreDeuceRules(uuid, winnerId);
+        } else {
+            givePlayerScore(uuid, winnerId);
+        }
+    }
 
     public void updateScore(UUID uuid, Long winnerId) {
         if (isTieBreak(uuid)) {
@@ -44,13 +53,11 @@ public class MatchScoreCalculationService {
         if (isTiebreakFinished(uuid)) {
             matchScoreModel.setTieBreak(NOT_TIEBREAK);
 
-
             updateGame(uuid, winnerId);
             if (isGameFinished(uuid, winner.getPlayerGame())) {
                 updateSet(uuid, winnerId);
             }
         }
-
     }
 
     private boolean isDeuce(UUID uuid) {
@@ -109,14 +116,11 @@ public class MatchScoreCalculationService {
 
     private int chooseAddingScore(int score) {
         switch (score) {
-            case ZERO -> {
-                return FIRST_ADDING_SCORE;
-            }
-            case FIRST_ADDING_SCORE -> {
-                return SECOND_ADDING_SCORE;
+            case ZERO, FIFTEEN -> {
+                return FIFTEEN;
             }
             default -> {
-                return FINAL_ADDING_SCORE;
+                return TEN;
             }
         }
     }
@@ -206,7 +210,7 @@ public class MatchScoreCalculationService {
         int player2Score = matchScoreModel.getPlayer2ScoreModel().getPlayerScore();
 
         return (player1Score >= TIEBREAK_SCORE_TO_WIN && (player1Score - player2Score) >= DIFFERENCE_IN_SCORES_TO_WIN_TIEBREAK) ||
-               (player2Score >= TIEBREAK_SCORE_TO_WIN && (player2Score - player1Score) >= DIFFERENCE_IN_SCORES_TO_WIN_TIEBREAK);
+                (player2Score >= TIEBREAK_SCORE_TO_WIN && (player2Score - player1Score) >= DIFFERENCE_IN_SCORES_TO_WIN_TIEBREAK);
     }
 
 }

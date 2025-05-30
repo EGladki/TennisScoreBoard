@@ -11,4 +11,3 @@ import lombok.*;
 public class PlayerRequestDto {
     private String name;
 }
-
