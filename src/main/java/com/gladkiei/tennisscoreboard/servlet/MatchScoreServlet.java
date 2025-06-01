@@ -6,7 +6,6 @@ import com.gladkiei.tennisscoreboard.models.Match;
 import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
 import com.gladkiei.tennisscoreboard.service.FinishedMatchesPersistenceService;
 import com.gladkiei.tennisscoreboard.service.MatchScoreCalculationService;
-import com.gladkiei.tennisscoreboard.service.OngoingMatchService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,6 +14,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.UUID;
+
+import static com.gladkiei.tennisscoreboard.enums.MatchState.COMPLETED;
 
 @WebServlet("/match-score")
 public class MatchScoreServlet extends HttpServlet {
@@ -68,6 +69,6 @@ public class MatchScoreServlet extends HttpServlet {
     }
 
     public boolean isCompleted(MatchScoreModel matchScoreModel) {
-        return matchScoreModel.isState();
+        return matchScoreModel.getState() == COMPLETED;
     }
 }

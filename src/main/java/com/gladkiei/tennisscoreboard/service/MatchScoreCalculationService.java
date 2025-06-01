@@ -1,117 +1,46 @@
 package com.gladkiei.tennisscoreboard.service;
 
 import com.gladkiei.tennisscoreboard.dao.MatchScoreModelDao;
+import com.gladkiei.tennisscoreboard.enums.MatchState;
 import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
 import com.gladkiei.tennisscoreboard.models.PlayerScoreModel;
 
+import java.util.Map;
 import java.util.UUID;
 
-import static com.gladkiei.tennisscoreboard.service.OngoingMatchService.*;
+import static com.gladkiei.tennisscoreboard.enums.MatchState.*;
+import static com.gladkiei.tennisscoreboard.enums.WinnerStatus.WINNER;
+import static com.gladkiei.tennisscoreboard.service.OngoingMatchService.START_GAME;
+import static com.gladkiei.tennisscoreboard.service.OngoingMatchService.START_SCORE;
 
-public class MatchScoreCalculationService implements UpdateScore {
+public class MatchScoreCalculationService {
+    private final static int ZERO = 0;
+    final static int ONE_POINT = 1;
+    private final static int FIFTEEN = 15;
+    private final static int TEN = 10;
     private final static int MAX_SCORE = 40;
     private final static int MAX_GAMES = 6;
     private final static int MAX_SETS = 2;
+    final static int MORE = 1;
+    final static int LESS = -1;
     private final static int TIEBREAK_SCORE_TO_WIN = 7;
     private final static int DIFFERENCE_IN_SCORES_TO_WIN_TIEBREAK = 2;
-    private final static int ZERO = 0;
-    private final static int ONE_POINT = 1;
-    private final static int MORE = 1;
-    private final static int LESS = -1;
-    private final static int FIFTEEN = 15;
-    private final static int TEN = 10;
     private final MatchScoreModelDao matchScoreModelDao = new MatchScoreModelDao();
+    private final Map<MatchState, ScoreStrategy> strategyMap = Map.of(
+            IN_PROGRESS, new CommonScoreStrategy(this),
+            DEUCE, new DeuceScoreStrategy(this),
+            TIEBREAK, new TiebreakScoreStrategy(this));
 
-    @Override
-    public void execute(UUID uuid, Long winnerId) {
-        if (isTieBreak(uuid)) {
-            playTiebreak(uuid, winnerId);
-        } else if (isDeuce(uuid)) {
-            givePlayerScoreDeuceRules(uuid, winnerId);
-        } else {
-            givePlayerScore(uuid, winnerId);
-        }
-    }
 
     public void updateScore(UUID uuid, Long winnerId) {
-        if (isTieBreak(uuid)) {
-            playTiebreak(uuid, winnerId);
-        } else if (isDeuce(uuid)) {
-            givePlayerScoreDeuceRules(uuid, winnerId);
-        } else {
-            givePlayerScore(uuid, winnerId);
-        }
+        MatchScoreModel matchScoreModel = matchScoreModelDao.getModel(uuid);
+        ScoreStrategy scoreStrategy = strategyMap.get(matchScoreModel.getState());
+        scoreStrategy.execute(uuid, winnerId);
     }
 
-    private void playTiebreak(UUID uuid, Long winnerId) {
-        MatchScoreModel matchScoreModel = matchScoreModelDao.getModel(uuid);
-        PlayerScoreModel winner = getWinner(winnerId, matchScoreModel);
-        PlayerScoreModel loser = getLoser(winnerId, matchScoreModel);
-
-        winner.setPlayerScore(winner.getPlayerScore() + ONE_POINT);
-
-        if (isTiebreakFinished(uuid)) {
-            matchScoreModel.setTieBreak(NOT_TIEBREAK);
-
-            updateGame(uuid, winnerId);
-            if (isGameFinished(uuid, winner.getPlayerGame())) {
-                updateSet(uuid, winnerId);
-            }
-        }
-    }
-
-    private boolean isDeuce(UUID uuid) {
-        MatchScoreModel matchScoreModel = matchScoreModelDao.getModel(uuid);
-        if (matchScoreModel.isDeuce()) {
-            return true;
-        }
-        int playerScore1 = matchScoreModel.getPlayer1ScoreModel().getPlayerScore();
-        int playerScore2 = matchScoreModel.getPlayer2ScoreModel().getPlayerScore();
-        if (playerScore1 == MAX_SCORE && playerScore2 == MAX_SCORE) {
-            matchScoreModel.setDeuce(DEUCE);
-            resetScore(uuid);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private void resetScore(UUID uuid) {
-        MatchScoreModel matchScoreModel = matchScoreModelDao.getModel(uuid);
-        matchScoreModel.getPlayer1ScoreModel().setPlayerScore(ZERO);
-        matchScoreModel.getPlayer2ScoreModel().setPlayerScore(ZERO);
-    }
-
-    private void givePlayerScoreDeuceRules(UUID uuid, Long winnerId) {
-        MatchScoreModel matchScoreModel = matchScoreModelDao.getModel(uuid);
-        PlayerScoreModel winner = getWinner(winnerId, matchScoreModel);
-        PlayerScoreModel loser = getLoser(winnerId, matchScoreModel);
-
-        winner.setPlayerScore(winner.getPlayerScore() + MORE);
-        loser.setPlayerScore(loser.getPlayerScore() + LESS);
-
-        if (winner.getPlayerScore() > MORE) {
-            matchScoreModel.setDeuce(NOT_DEUCE);
-            updateGame(uuid, winnerId);
-            if (isGameFinished(uuid, winner.getPlayerGame())) {
-                updateSet(uuid, winnerId);
-            }
-        }
-    }
-
-    private void givePlayerScore(UUID uuid, Long winnerId) {
-        MatchScoreModel matchScoreModel = matchScoreModelDao.getModel(uuid);
-        PlayerScoreModel winner = getWinner(winnerId, matchScoreModel);
-
+    void incrementScore(PlayerScoreModel winner) {
         int score = chooseAddingScore(winner.getPlayerScore());
         winner.setPlayerScore(winner.getPlayerScore() + score);
-
-        if (isMatchFinished(winner.getPlayerScore())) {
-            updateGame(uuid, winnerId);
-            if (isGameFinished(uuid, winner.getPlayerGame())) {
-                updateSet(uuid, winnerId);
-            }
-        }
     }
 
     private int chooseAddingScore(int score) {
@@ -125,58 +54,27 @@ public class MatchScoreCalculationService implements UpdateScore {
         }
     }
 
-    public void updateGame(UUID uuid, Long winnerId) {
-        MatchScoreModel match = MatchScoreModelDao.getInstance().getModel(uuid);
-        PlayerScoreModel winner = getWinner(winnerId, match);
-        PlayerScoreModel loser = getLoser(winnerId, match);
+    void updateGame(MatchScoreModel matchScoreModel, Long winnerId) {
+        PlayerScoreModel winner = getWinner(winnerId, matchScoreModel);
 
-        winner.setPlayerScore(START_SCORE);
         winner.setPlayerGame(winner.getPlayerGame() + ONE_POINT);
-        loser.setPlayerScore(START_SCORE);
+        ifTiebreakUpdateStateAndResetScore(matchScoreModel);
+        resetScore(matchScoreModel);
     }
 
-    public void updateSet(UUID uuid, Long winnerId) {
-        MatchScoreModel match = MatchScoreModelDao.getInstance().getModel(uuid);
-        PlayerScoreModel winner = getWinner(winnerId, match);
-        PlayerScoreModel loser = getLoser(winnerId, match);
-
+    void updateSet(MatchScoreModel matchScoreModel, Long winnerId) {
+        PlayerScoreModel winner = getWinner(winnerId, matchScoreModel);
         winner.setPlayerSet(winner.getPlayerSet() + ONE_POINT);
 
-        if (!hasNeededExtraMatch(uuid) && isSetFinished(uuid, winner.getPlayerSet())) {
-            winner.setWinner(WINNER);
-            match.setState(COMPLETED);
+        if (!hasNeededExtraMatch(matchScoreModel) && isSetFinished(winner)) {
+            winner.setWinnerStatus(WINNER);
+            matchScoreModel.setState(COMPLETED);
         }
-
-        winner.setPlayerScore(START_SCORE);
-        winner.setPlayerGame(START_GAME);
-        loser.setPlayerScore(START_SCORE);
-        loser.setPlayerGame(START_GAME);
+        resetScore(matchScoreModel);
+        resetGames(matchScoreModel);
     }
 
-    private boolean isTieBreak(UUID uuid) {
-        MatchScoreModel matchScoreModel = matchScoreModelDao.getModel(uuid);
-        if (matchScoreModel.isTieBreak()) {
-            return true;
-        }
-        int player1Game = matchScoreModel.getPlayer1ScoreModel().getPlayerGame();
-        int player2Game = matchScoreModel.getPlayer2ScoreModel().getPlayerGame();
-        if (player1Game == MAX_GAMES && player2Game == MAX_GAMES) {
-            matchScoreModel.setTieBreak(TIEBREAK);
-            resetScore(uuid);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    private boolean hasNeededExtraMatch(UUID uuid) {
-        MatchScoreModel matchScoreModel = matchScoreModelDao.getModel(uuid);
-        int player1Game = matchScoreModel.getPlayer1ScoreModel().getPlayerGame();
-        int player2Game = matchScoreModel.getPlayer2ScoreModel().getPlayerGame();
-        return ((player1Game == 5 && player2Game == 6) || (player1Game == 6 && player2Game == 5));
-    }
-
-    private PlayerScoreModel getWinner(Long winnerId, MatchScoreModel matchScoreModel) {
+    protected PlayerScoreModel getWinner(Long winnerId, MatchScoreModel matchScoreModel) {
         if (winnerId.equals(matchScoreModel.getPlayer1ScoreModel().getPlayerId())) {
             return matchScoreModel.getPlayer1ScoreModel();
         } else {
@@ -184,7 +82,7 @@ public class MatchScoreCalculationService implements UpdateScore {
         }
     }
 
-    private PlayerScoreModel getLoser(Long winnerId, MatchScoreModel matchScoreModel) {
+    PlayerScoreModel getLoser(Long winnerId, MatchScoreModel matchScoreModel) {
         if (!winnerId.equals(matchScoreModel.getPlayer1ScoreModel().getPlayerId())) {
             return matchScoreModel.getPlayer1ScoreModel();
         } else {
@@ -192,25 +90,58 @@ public class MatchScoreCalculationService implements UpdateScore {
         }
     }
 
-    private boolean isMatchFinished(int score) {
-        return score > MAX_SCORE;
+    private void resetScore(MatchScoreModel matchScoreModel) {
+        matchScoreModel.getPlayer1ScoreModel().setPlayerScore(START_SCORE);
+        matchScoreModel.getPlayer2ScoreModel().setPlayerScore(START_SCORE);
     }
 
-    private boolean isGameFinished(UUID uuid, int games) {
-        return games >= MAX_GAMES && !hasNeededExtraMatch(uuid) && !isTieBreak(uuid);
+    private void resetGames(MatchScoreModel matchScoreModel) {
+        matchScoreModel.getPlayer1ScoreModel().setPlayerGame(START_GAME);
+        matchScoreModel.getPlayer2ScoreModel().setPlayerGame(START_GAME);
     }
 
-    private boolean isSetFinished(UUID uuid, int sets) {
-        return sets == MAX_SETS;
+    void ifDeuceUpdateStateAndResetScore(MatchScoreModel matchScoreModel) {
+        int playerScore1 = matchScoreModel.getPlayer1ScoreModel().getPlayerScore();
+        int playerScore2 = matchScoreModel.getPlayer2ScoreModel().getPlayerScore();
+        if (playerScore1 == MAX_SCORE && playerScore2 == MAX_SCORE) {
+            matchScoreModel.setState(DEUCE);
+            resetScore(matchScoreModel);
+        }
     }
 
-    private boolean isTiebreakFinished(UUID uuid) {
-        MatchScoreModel matchScoreModel = matchScoreModelDao.getModel(uuid);
+    private void ifTiebreakUpdateStateAndResetScore(MatchScoreModel matchScoreModel) {
+        int player1Game = matchScoreModel.getPlayer1ScoreModel().getPlayerGame();
+        int player2Game = matchScoreModel.getPlayer2ScoreModel().getPlayerGame();
+        if (player1Game == MAX_GAMES && player2Game == MAX_GAMES) {
+            matchScoreModel.setState(TIEBREAK);
+            resetScore(matchScoreModel);
+        }
+    }
+
+    boolean isMatchFinished(PlayerScoreModel winner) {
+        return winner.getPlayerScore() > MAX_SCORE;
+    }
+
+    public boolean isGameFinished(MatchScoreModel matchScoreModel, PlayerScoreModel winner) {
+        return winner.getPlayerGame() >= MAX_GAMES && !hasNeededExtraMatch(matchScoreModel) && matchScoreModel.getState() != TIEBREAK;
+    }
+
+    private boolean isSetFinished(PlayerScoreModel winner) {
+        return winner.getPlayerSet() == MAX_SETS;
+    }
+
+    boolean isTiebreakFinished(MatchScoreModel matchScoreModel) {
         int player1Score = matchScoreModel.getPlayer1ScoreModel().getPlayerScore();
         int player2Score = matchScoreModel.getPlayer2ScoreModel().getPlayerScore();
 
         return (player1Score >= TIEBREAK_SCORE_TO_WIN && (player1Score - player2Score) >= DIFFERENCE_IN_SCORES_TO_WIN_TIEBREAK) ||
-                (player2Score >= TIEBREAK_SCORE_TO_WIN && (player2Score - player1Score) >= DIFFERENCE_IN_SCORES_TO_WIN_TIEBREAK);
+               (player2Score >= TIEBREAK_SCORE_TO_WIN && (player2Score - player1Score) >= DIFFERENCE_IN_SCORES_TO_WIN_TIEBREAK);
+    }
+
+    private boolean hasNeededExtraMatch(MatchScoreModel matchScoreModel) {
+        int player1Game = matchScoreModel.getPlayer1ScoreModel().getPlayerGame();
+        int player2Game = matchScoreModel.getPlayer2ScoreModel().getPlayerGame();
+        return ((player1Game == 5 && player2Game == 6) || (player1Game == 6 && player2Game == 5));
     }
 
 }

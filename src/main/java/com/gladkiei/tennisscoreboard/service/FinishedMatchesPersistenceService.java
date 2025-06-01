@@ -9,7 +9,7 @@ import com.gladkiei.tennisscoreboard.models.Player;
 
 import java.util.UUID;
 
-import static com.gladkiei.tennisscoreboard.service.OngoingMatchService.COMPLETED;
+import static com.gladkiei.tennisscoreboard.enums.WinnerStatus.WINNER;
 
 public class FinishedMatchesPersistenceService {
     private final MatchDao matchDao = new MatchDao();
@@ -35,7 +35,7 @@ public class FinishedMatchesPersistenceService {
     }
 
     private Long getWinnerId(MatchScoreModel matchScoreModel) {
-        if (matchScoreModel.getPlayer1ScoreModel().isWinner()) {
+        if (matchScoreModel.getPlayer1ScoreModel().getWinnerStatus() == WINNER) {
             return matchScoreModel.getPlayer1ScoreModel().getPlayerId();
         } else {
             return matchScoreModel.getPlayer2ScoreModel().getPlayerId();

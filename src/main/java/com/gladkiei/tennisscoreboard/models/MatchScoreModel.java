@@ -1,5 +1,6 @@
 package com.gladkiei.tennisscoreboard.models;
 
+import com.gladkiei.tennisscoreboard.enums.MatchState;
 import lombok.*;
 
 import java.util.UUID;
@@ -14,15 +15,11 @@ public class MatchScoreModel {
     private UUID uuid;
     private PlayerScoreModel player1ScoreModel;
     private PlayerScoreModel player2ScoreModel;
-    private boolean deuce;
-    private boolean tieBreak;
-    private boolean state;
+    private MatchState state;
 
-    public MatchScoreModel(PlayerScoreModel player1ScoreModel, PlayerScoreModel player2ScoreModel, boolean deuce, boolean tieBreak, boolean state) {
+    public MatchScoreModel(PlayerScoreModel player1ScoreModel, PlayerScoreModel player2ScoreModel, MatchState state) {
         this.player1ScoreModel = player1ScoreModel;
         this.player2ScoreModel = player2ScoreModel;
-        this.deuce = deuce;
-        this.tieBreak = tieBreak;
         this.state = state;
     }
 }

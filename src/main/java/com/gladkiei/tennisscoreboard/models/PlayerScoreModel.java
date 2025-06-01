@@ -1,5 +1,6 @@
 package com.gladkiei.tennisscoreboard.models;
 
+import com.gladkiei.tennisscoreboard.enums.WinnerStatus;
 import lombok.*;
 
 @Setter
@@ -12,5 +13,5 @@ public class PlayerScoreModel {
     private int playerScore;
     private int playerGame;
     private int playerSet;
-    private boolean isWinner;
+    private WinnerStatus winnerStatus;
 }

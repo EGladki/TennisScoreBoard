@@ -10,7 +10,6 @@ public class MatchDao {
 
     public List<Match> getAll() {
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
-
             return session.createQuery("""
                     SELECT m FROM Match m
                     JOIN FETCH m.player1
