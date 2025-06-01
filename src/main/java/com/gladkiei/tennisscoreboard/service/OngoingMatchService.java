@@ -21,28 +21,14 @@ public class OngoingMatchService {
     static final int START_SCORE = 0;
     static final int START_GAME = 0;
     static final int START_SET = 0;
-    private final PlayerDao playerDao = new PlayerDao();
+    private final PlayerService playerService = new PlayerService();
 
     public MatchScoreModel startMatch(PlayerRequestDto player1RequestDto, PlayerRequestDto player2RequestDto) {
-        PlayerResponseDto player1ResponseDto = getPlayerResponseDto(player1RequestDto);
-        PlayerResponseDto player2ResponseDto = getPlayerResponseDto(player2RequestDto);
+        PlayerResponseDto player1ResponseDto = playerService.getPlayerResponseDto(player1RequestDto);
+        PlayerResponseDto player2ResponseDto = playerService.getPlayerResponseDto(player2RequestDto);
         MatchScoreModel matchScoreModel = createOngoingMatch(player1ResponseDto, player2ResponseDto);
         addToStorage(matchScoreModel);
         return matchScoreModel;
-    }
-
-    private PlayerResponseDto getPlayerResponseDto(PlayerRequestDto playerRequestDto) {
-        if (isPlayerAlreadyExist(playerRequestDto)) {
-            return getPlayerResponseDtoFromDao(playerRequestDto);
-        } else {
-            playerDao.save(convertToPlayer(playerRequestDto));
-            return getPlayerResponseDtoFromDao(playerRequestDto);
-        }
-    }
-
-    private PlayerResponseDto getPlayerResponseDtoFromDao(PlayerRequestDto playerRequestDto) {
-        Optional<Player> player = playerDao.findByName(playerRequestDto.getName());
-        return convertToDto(player.get());
     }
 
     private MatchScoreModel createOngoingMatch(PlayerResponseDto player1ResponseDto, PlayerResponseDto player2ResponseDto) {
@@ -55,11 +41,5 @@ public class OngoingMatchService {
         UUID uuid = UUID.randomUUID();
         matchScoreModel.setUuid(uuid);
         MatchScoreModelDao.getInstance().put(uuid, matchScoreModel);
-    }
-
-    private boolean isPlayerAlreadyExist(PlayerRequestDto playerRequestDto) {
-        Player player = convertToPlayer(playerRequestDto);
-        Optional<Player> optional = playerDao.findByName(player.getName());
-        return optional.isPresent();
     }
 }

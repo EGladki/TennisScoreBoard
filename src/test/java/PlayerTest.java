@@ -8,4 +8,5 @@ public class PlayerTest {
         Player player = new Player();
         Assertions.assertNull(player.getId());
     }
+
 }

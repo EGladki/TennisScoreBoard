@@ -10,7 +10,7 @@ public class MatchScoreModelDao {
 
     public static MatchScoreModelDao getInstance() {
         if (instance == null) {
-            return new MatchScoreModelDao();
+            instance = new MatchScoreModelDao();
         }
         return instance;
     }
@@ -25,7 +25,7 @@ public class MatchScoreModelDao {
         return ongoingMatches.get(uuid);
     }
 
-    public void removeModel(UUID uuid) {
+    public void remove(UUID uuid) {
         ongoingMatches.remove(uuid);
     }
 

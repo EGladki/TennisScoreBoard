@@ -1,32 +1,27 @@
 package com.gladkiei.tennisscoreboard.service;
 
-import com.gladkiei.tennisscoreboard.dao.MatchScoreModelDao;
 import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
 import com.gladkiei.tennisscoreboard.models.PlayerScoreModel;
 
-import java.util.UUID;
-
 public class CommonScoreStrategy implements ScoreStrategy {
 
-    private final MatchScoreModelDao matchScoreModelDao = new MatchScoreModelDao();
-    private final MatchScoreCalculationService calcService;
+    private final MatchScoreCalculationService matchScoreCalculationService;
 
-    public CommonScoreStrategy(MatchScoreCalculationService calcService) {
-        this.calcService = calcService;
+    public CommonScoreStrategy(MatchScoreCalculationService matchScoreCalculationService) {
+        this.matchScoreCalculationService = matchScoreCalculationService;
     }
 
     @Override
-    public void execute(UUID uuid, Long winnerId) {
-        MatchScoreModel matchScoreModel = matchScoreModelDao.getModel(uuid);
-        PlayerScoreModel winner = calcService.getWinner(winnerId, matchScoreModel);
+    public void execute(MatchScoreModel matchScoreModel, Long winnerId) {
+        PlayerScoreModel winner = matchScoreCalculationService.getWinner(winnerId, matchScoreModel);
 
-        calcService.incrementScore(winner);
-        calcService.ifDeuceUpdateStateAndResetScore(matchScoreModel);
+        matchScoreCalculationService.incrementScore(winner);
+        matchScoreCalculationService.ifDeuceUpdateStateAndResetScore(matchScoreModel);
 
-        if (calcService.isMatchFinished(winner)) {
-            calcService.updateGame(matchScoreModel, winnerId);
-            if (calcService.isGameFinished(matchScoreModel, winner)) {
-                calcService.updateSet(matchScoreModel, winnerId);
+        if (matchScoreCalculationService.isMatchFinished(winner)) {
+            matchScoreCalculationService.updateGame(matchScoreModel, winnerId);
+            if (matchScoreCalculationService.isGameFinished(matchScoreModel, winner)) {
+                matchScoreCalculationService.updateSet(matchScoreModel, winnerId);
             }
         }
     }

@@ -1,7 +1,9 @@
 package com.gladkiei.tennisscoreboard.service;
 
+import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
+
 import java.util.UUID;
 
 public interface ScoreStrategy {
-    void execute(UUID uuid, Long winnerId);
+    void execute(MatchScoreModel matchScoreModel, Long winnerId);
 }

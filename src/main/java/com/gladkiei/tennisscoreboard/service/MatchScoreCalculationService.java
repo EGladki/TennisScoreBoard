@@ -34,8 +34,9 @@ public class MatchScoreCalculationService {
 
     public void updateScore(UUID uuid, Long winnerId) {
         MatchScoreModel matchScoreModel = matchScoreModelDao.getModel(uuid);
-        ScoreStrategy scoreStrategy = strategyMap.get(matchScoreModel.getState());
-        scoreStrategy.execute(uuid, winnerId);
+        synchronized (matchScoreModel) {
+            strategyMap.get(matchScoreModel.getState()).execute(matchScoreModel,winnerId);
+        }
     }
 
     void incrementScore(PlayerScoreModel winner) {
@@ -66,7 +67,7 @@ public class MatchScoreCalculationService {
         PlayerScoreModel winner = getWinner(winnerId, matchScoreModel);
         winner.setPlayerSet(winner.getPlayerSet() + ONE_POINT);
 
-        if (!hasNeededExtraMatch(matchScoreModel) && isSetFinished(winner)) {
+        if (!needsExtraGameBeforeWin(matchScoreModel) && isSetFinished(winner)) {
             winner.setWinnerStatus(WINNER);
             matchScoreModel.setState(COMPLETED);
         }
@@ -74,7 +75,7 @@ public class MatchScoreCalculationService {
         resetGames(matchScoreModel);
     }
 
-    protected PlayerScoreModel getWinner(Long winnerId, MatchScoreModel matchScoreModel) {
+    PlayerScoreModel getWinner(Long winnerId, MatchScoreModel matchScoreModel) {
         if (winnerId.equals(matchScoreModel.getPlayer1ScoreModel().getPlayerId())) {
             return matchScoreModel.getPlayer1ScoreModel();
         } else {
@@ -122,8 +123,8 @@ public class MatchScoreCalculationService {
         return winner.getPlayerScore() > MAX_SCORE;
     }
 
-    public boolean isGameFinished(MatchScoreModel matchScoreModel, PlayerScoreModel winner) {
-        return winner.getPlayerGame() >= MAX_GAMES && !hasNeededExtraMatch(matchScoreModel) && matchScoreModel.getState() != TIEBREAK;
+    boolean isGameFinished(MatchScoreModel matchScoreModel, PlayerScoreModel winner) {
+        return winner.getPlayerGame() >= MAX_GAMES && !needsExtraGameBeforeWin(matchScoreModel) && matchScoreModel.getState() != TIEBREAK;
     }
 
     private boolean isSetFinished(PlayerScoreModel winner) {
@@ -138,7 +139,7 @@ public class MatchScoreCalculationService {
                (player2Score >= TIEBREAK_SCORE_TO_WIN && (player2Score - player1Score) >= DIFFERENCE_IN_SCORES_TO_WIN_TIEBREAK);
     }
 
-    private boolean hasNeededExtraMatch(MatchScoreModel matchScoreModel) {
+    private boolean needsExtraGameBeforeWin(MatchScoreModel matchScoreModel) {
         int player1Game = matchScoreModel.getPlayer1ScoreModel().getPlayerGame();
         int player2Game = matchScoreModel.getPlayer2ScoreModel().getPlayerGame();
         return ((player1Game == 5 && player2Game == 6) || (player1Game == 6 && player2Game == 5));

@@ -1,33 +1,29 @@
 package com.gladkiei.tennisscoreboard.service;
 
-import com.gladkiei.tennisscoreboard.dao.MatchScoreModelDao;
 import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
 import com.gladkiei.tennisscoreboard.models.PlayerScoreModel;
-
-import java.util.UUID;
 
 import static com.gladkiei.tennisscoreboard.enums.MatchState.IN_PROGRESS;
 import static com.gladkiei.tennisscoreboard.service.MatchScoreCalculationService.ONE_POINT;
 
 public class TiebreakScoreStrategy implements ScoreStrategy {
-    private final MatchScoreModelDao matchScoreModelDao = new MatchScoreModelDao();
-    private final MatchScoreCalculationService calcService;
+    private final MatchScoreCalculationService matchScoreCalculationService;
 
-    public TiebreakScoreStrategy(MatchScoreCalculationService calcService) {
-        this.calcService = calcService;
+    public TiebreakScoreStrategy(MatchScoreCalculationService matchScoreCalculationService) {
+        this.matchScoreCalculationService = matchScoreCalculationService;
+
     }
 
     @Override
-    public void execute(UUID uuid, Long winnerId) {
-        MatchScoreModel matchScoreModel = matchScoreModelDao.getModel(uuid);
-        PlayerScoreModel winner = calcService.getWinner(winnerId, matchScoreModel);
+    public void execute(MatchScoreModel matchScoreModel, Long winnerId) {
+        PlayerScoreModel winner = matchScoreCalculationService.getWinner(winnerId, matchScoreModel);
         winner.setPlayerScore(winner.getPlayerScore() + ONE_POINT);
 
-        if (calcService.isTiebreakFinished(matchScoreModel)) {
+        if (matchScoreCalculationService.isTiebreakFinished(matchScoreModel)) {
             matchScoreModel.setState(IN_PROGRESS);
-            calcService.updateGame(matchScoreModel, winnerId);
-            if (calcService.isGameFinished(matchScoreModel, winner)) {
-                calcService.updateSet(matchScoreModel, winnerId);
+            matchScoreCalculationService.updateGame(matchScoreModel, winnerId);
+            if (matchScoreCalculationService.isGameFinished(matchScoreModel, winner)) {
+                matchScoreCalculationService.updateSet(matchScoreModel, winnerId);
             }
         }
     }

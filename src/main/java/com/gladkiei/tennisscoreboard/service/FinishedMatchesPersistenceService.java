@@ -22,7 +22,7 @@ public class FinishedMatchesPersistenceService {
 
         Match finishedMatch = createCompletedMatch(uuid, winnerId);
         matchDao.save(finishedMatch);
-        matchScoreModelDao.removeModel(uuid);
+        matchScoreModelDao.remove(uuid);
         return finishedMatch;
     }
 
