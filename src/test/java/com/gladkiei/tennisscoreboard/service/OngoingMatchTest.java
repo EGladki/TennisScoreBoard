@@ -1,5 +1,4 @@
-import com.gladkiei.tennisscoreboard.service.OngoingMatchService;
-import org.junit.jupiter.api.Test;
+package com.gladkiei.tennisscoreboard.service;
 
 public class OngoingMatchTest {
     private final OngoingMatchService ongoingMatchService = new OngoingMatchService();

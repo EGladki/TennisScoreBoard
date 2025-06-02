@@ -16,8 +16,9 @@ import static com.gladkiei.tennisscoreboard.service.OngoingMatchService.START_SC
 public class MatchScoreCalculationService {
     private final static int ZERO = 0;
     final static int ONE_POINT = 1;
-    private final static int FIFTEEN = 15;
-    private final static int TEN = 10;
+    final static int FIRST_ADDING_SCORE = 15;
+    final static int SECOND_ADDING_SCORE = 15;
+    final static int THIRD_ADDING_SCORE = 10;
     private final static int MAX_SCORE = 40;
     private final static int MAX_GAMES = 6;
     private final static int MAX_SETS = 2;
@@ -35,7 +36,7 @@ public class MatchScoreCalculationService {
     public void updateScore(UUID uuid, Long winnerId) {
         MatchScoreModel matchScoreModel = matchScoreModelDao.getModel(uuid);
         synchronized (matchScoreModel) {
-            strategyMap.get(matchScoreModel.getState()).execute(matchScoreModel,winnerId);
+            strategyMap.get(matchScoreModel.getState()).execute(matchScoreModel, winnerId);
         }
     }
 
@@ -46,11 +47,14 @@ public class MatchScoreCalculationService {
 
     private int chooseAddingScore(int score) {
         switch (score) {
-            case ZERO, FIFTEEN -> {
-                return FIFTEEN;
+            case ZERO -> {
+                return FIRST_ADDING_SCORE;
+            }
+            case FIRST_ADDING_SCORE -> {
+                return SECOND_ADDING_SCORE;
             }
             default -> {
-                return TEN;
+                return THIRD_ADDING_SCORE;
             }
         }
     }
@@ -136,7 +140,7 @@ public class MatchScoreCalculationService {
         int player2Score = matchScoreModel.getPlayer2ScoreModel().getPlayerScore();
 
         return (player1Score >= TIEBREAK_SCORE_TO_WIN && (player1Score - player2Score) >= DIFFERENCE_IN_SCORES_TO_WIN_TIEBREAK) ||
-               (player2Score >= TIEBREAK_SCORE_TO_WIN && (player2Score - player1Score) >= DIFFERENCE_IN_SCORES_TO_WIN_TIEBREAK);
+                (player2Score >= TIEBREAK_SCORE_TO_WIN && (player2Score - player1Score) >= DIFFERENCE_IN_SCORES_TO_WIN_TIEBREAK);
     }
 
     private boolean needsExtraGameBeforeWin(MatchScoreModel matchScoreModel) {
