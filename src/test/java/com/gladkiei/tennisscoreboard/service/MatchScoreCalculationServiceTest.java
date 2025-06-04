@@ -6,7 +6,10 @@ import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
 import com.gladkiei.tennisscoreboard.models.PlayerScoreModel;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.UUID;
 
@@ -58,7 +61,7 @@ public class MatchScoreCalculationServiceTest {
     }
 
     @Test
-    void playerScoreShouldBeFirstAddingScorePlusSecondAddingScorePlusThirdAddingScoreAfterWinningThreeScores() {
+    void playerScoreShouldBeFourtyAfterWinningThreeScores() {
         for (int i = 0; i < 3; i++) {
             service.updateScore(matchID, player1.getPlayerId());
         }
