@@ -1,67 +1,54 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Новый матч</title>
-    <style>
-        body {
-            background-color: #121212;
-            color: #e0e0e0;
-            font-family: Arial, sans-serif;
-            padding: 40px;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tennis Scoreboard | Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 
-        h1 {
-            color: #ffffff;
-        }
-
-        form {
-            background-color: #1e1e1e;
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 400px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 15px;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            background-color: #2c2c2c;
-            border: 1px solid #444;
-            color: #fff;
-            border-radius: 5px;
-        }
-
-        button {
-            padding: 10px 20px;
-            background-color: #03dac6;
-            border: none;
-            color: #000;
-            font-weight: bold;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #00bfa5;
-        }
-    </style>
+    <script src="js/app.js"></script>
 </head>
 <body>
-<h1>Создать матч</h1>
-<form method="post" action="new-match">
-    <label>Игрок 1:
-        <input type="text" name="player1" required>
-    </label>
-    <label>Игрок 2:
-        <input type="text" name="player2" required>
-    </label>
-    <button type="submit">Добавить игроков</button>
-</form>
-<a href="matches">Список матчей</a>
-<a href="players">Список игроков</a>
+<header class="header">
+    <section class="nav-header">
+        <div class="brand">
+            <div class="nav-toggle">
+            </div>
+            <span class="logo-text">TennisScoreboard</span>
+        </div>
+        <div>
+            <nav class="nav-links">
+                <a class="nav-link" href="#">Home</a>
+                <a class="nav-link" href="matches">Matches</a>
+            </nav>
+        </div>
+    </section>
+</header>
+<main>
+    <div class="container">
+        <h1>Welcome to Tennis Scoreboard</h1>
+        <p>Manage your tennis matches, record results, and track rankings</p>
+        <div class="form-container center">
+            <a class="homepage-action-button" href="new-match.jsp">
+                <button class="btn start-match">
+                    Start a new match
+                </button>
+            </a>
+            <a class="homepage-action-button" href="matches">
+                <button class="btn view-results">
+                    View match results
+                </button>
+            </a>
+        </div>
+    </div>
+</main>
+<footer>
+    <div class="footer">
+        <p>&copy; Tennis Scoreboard, project from <a href="https://zhukovsd.github.io/java-backend-learning-course/">zhukovsd/java-backend-learning-course</a> roadmap.</p>
+    </div>
+</footer>
 </body>
 </html>

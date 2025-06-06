@@ -20,6 +20,6 @@ public class GetPlayersServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Player> players = playerDao.findAll();
         req.setAttribute("players", players);
-        req.getRequestDispatcher("/players-page.jsp").forward(req, resp);
+        req.getRequestDispatcher("/players.jsp").forward(req, resp);
     }
 }

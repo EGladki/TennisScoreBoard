@@ -1,68 +1,102 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<html>
+<!DOCTYPE html>
+<html lang="ru">
 <head>
+    <meta charset="UTF-8">
     <title>Завершённый матч</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <style>
-        body {
-            background-color: #121212;
-            color: #e0e0e0;
-            font-family: Arial, sans-serif;
-            padding: 40px;
+        .completed-match-container {
+            max-width: 600px;
+            margin: 60px auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            color: #473a3d;
+            text-align: center;
         }
 
-        h1 {
-            color: #ffffff;
-        }
-
-        table {
+        .completed-match-table {
             width: 100%;
             border-collapse: collapse;
-            background-color: #1e1e1e;
-            border-radius: 8px;
-            overflow: hidden;
             margin-top: 20px;
         }
 
-        th, td {
-            padding: 15px;
-            text-align: center;
-            border-bottom: 1px solid #2a2a2a;
+        .completed-match-table th,
+        .completed-match-table td {
+            border: 1px solid #e0d1ce;
+            padding: 12px;
+            font-size: 1rem;
         }
 
-        th {
-            background-color: #2a2a2a;
-            color: #ffffff;
+        .completed-match-table th {
+            background-color: #f4eae7;
+            font-weight: 600;
+            color: #8e605b;
         }
 
-        tr:last-child td {
-            border-bottom: none;
+        .completed-match-table td {
+            background-color: #fff8f6;
         }
 
-        .winner {
-            color: #03dac6;
+        .winner-name {
+            color: #cb7b6b;
             font-weight: bold;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            text-decoration: none;
+            color: #8e605b;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
+<header class="header">
+    <section class="nav-header">
+        <div class="brand">
+            <div class="nav-toggle">
+            </div>
+            <span class="logo-text">TennisScoreboard</span>
+        </div>
+        <div>
+            <nav class="nav-links">
+                <a class="nav-link" href="index.jsp">Home</a>
+                <a class="nav-link" href="matches">Matches</a>
+            </nav>
+        </div>
+    </section>
+</header>
 <body>
 
-<h1>Завершённый матч</h1>
+<main>
+    <div class="completed-match-container">
+        <h2 class="page-title">Match finished</h2>
 
-<table>
-    <tr>
-        <th>Игрок 1</th>
-        <th>Игрок 2</th>
-        <th>Победитель</th>
-    </tr>
-    <tr>
-        <td>${player1.name}</td>
-        <td>${player2.name}</td>
-        <td class="winner">${winner.name}</td>
-    </tr>
-</table>
+        <table class="completed-match-table">
+            <tr>
+                <th>Player 1</th>
+                <th>Player 2</th>
+                <th>Winner</th>
+            </tr>
+            <tr>
+                <td>${player1.name}</td>
+                <td>${player2.name}</td>
+                <td class="winner-name">${winner.name}</td>
+            </tr>
+        </table>
 
-<a href="matches" style="color: #03dac6; text-decoration: none; display: inline-block; margin-top: 20px;">← Назад к матчам</a>
+        <a href="new-match.jsp" class="back-link">Create new match</a>
+    </div>
+</main>
 
 </body>
 </html>

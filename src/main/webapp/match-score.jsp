@@ -1,106 +1,88 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>Счёт матча</title>
-  <style>
-    body {
-      background-color: #121212;
-      color: #e0e0e0;
-      font-family: Arial, sans-serif;
-      padding: 40px;
-    }
+  <meta charset="UTF-8">
+  <title>Tennis Scoreboard | Match Score</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 30px;
-    }
-
-    th, td {
-      border: 1px solid #2a2a2a;
-      padding: 15px;
-      text-align: center;
-    }
-
-    th {
-      background-color: #1f1f1f;
-    }
-
-    td {
-      background-color: #1a1a1a;
-    }
-
-    form {
-      display: inline-block;
-      margin: 10px;
-    }
-
-    button {
-      padding: 12px 24px;
-      font-size: 16px;
-      background-color: #03dac6;
-      border: none;
-      color: #000;
-      font-weight: bold;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #00bfa5;
-    }
-
-    a {
-      color: #03dac6;
-      text-decoration: none;
-      display: inline-block;
-      margin-top: 30px;
-    }
-
-    a:hover {
-      color: #00bfa5;
-    }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>Текущий матч</h1>
+<header class="header">
+  <section class="nav-header">
+    <div class="brand">
+      <div class="nav-toggle">
+      </div>
+      <span class="logo-text">TennisScoreboard</span>
+    </div>
+    <div>
+      <nav class="nav-links">
+        <a class="nav-link" href="index.jsp">Home</a>
+        <a class="nav-link" href="matches">Matches</a>
+      </nav>
+    </div>
+  </section>
+</header>
 
-<table>
-  <tr>
-    <th>Игрок</th>
-    <th>Score</th>
-    <th>Game</th>
-    <th>Set</th>
-  </tr>
-  <tr>
-    <td>${player1.name}</td>
-    <td>${player1Score}</td>
-    <td>${player1Game}</td>
-    <td>${player1Set}</td>
-  </tr>
-  <tr>
-    <td>${player2.name}</td>
-    <td>${player2Score}</td>
-    <td>${player2Game}</td>
-    <td>${player2Set}</td>
-  </tr>
-</table>
+<main>
+  <div class="container">
+    <h1 class="page-title">Current Match</h1>
 
-<!-- Кнопка: Игрок 1 выиграл очко -->
-<form method="post" action="match-score?uuid=${uuid}">
-  <input type="hidden" name="playerId" value="${player1.id}">
-  <button type="submit">${player1.name} выиграл очко</button>
-</form>
+    <div class="form-container">
+      <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+        <tr style="background-color: #f4eae7; color: #8e605b;">
+          <th style="padding: 12px; border-bottom: 2px solid #cb7b6b;">Player</th>
+          <th style="padding: 12px; border-bottom: 2px solid #cb7b6b;">Score</th>
+          <th style="padding: 12px; border-bottom: 2px solid #cb7b6b;">Game</th>
+          <th style="padding: 12px; border-bottom: 2px solid #cb7b6b;">Set</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr style="text-align: center; background-color: #fff;">
+          <td style="padding: 10px;">${player1.name}</td>
+          <td style="padding: 10px;">${player1Score}</td>
+          <td style="padding: 10px;">${player1Game}</td>
+          <td style="padding: 10px;">${player1Set}</td>
+        </tr>
+        <tr style="text-align: center; background-color: #fff;">
+          <td style="padding: 10px;">${player2.name}</td>
+          <td style="padding: 10px;">${player2Score}</td>
+          <td style="padding: 10px;">${player2Game}</td>
+          <td style="padding: 10px;">${player2Set}</td>
+        </tr>
+        </tbody>
+      </table>
 
-<!-- Кнопка: Игрок 2 выиграл очко -->
-<form method="post" action="match-score?uuid=${uuid}">
-  <input type="hidden" name="playerId" value="${player2.id}">
-  <button type="submit">${player2.name} выиграл очко</button>
-</form>
+      <form method="post" action="match-score?uuid=${uuid}" style="margin: 15px 0;">
+        <input type="hidden" name="playerId" value="${player1.id}">
+        <button type="submit" class="btn">${player1.name} выиграл очко</button>
+      </form>
 
-<a href="matches">⬅ Назад к матчам</a>
+      <form method="post" action="match-score?uuid=${uuid}" style="margin: 15px 0;">
+        <input type="hidden" name="playerId" value="${player2.id}">
+        <button type="submit" class="btn">${player2.name} выиграл очко</button>
+      </form>
+
+      <div class="links" style="margin-top: 20px;">
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; Tennis Scoreboard, project from
+    <a href="https://zhukovsd.github.io/java-backend-learning-course/" target="_blank">
+      zhukovsd/java-backend-learning-course
+    </a>
+  </p>
+</footer>
 
 </body>
 </html>

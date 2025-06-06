@@ -5,10 +5,10 @@ import com.gladkiei.tennisscoreboard.exception.BadRequestException;
 public class NameValidator {
     public void validate(String name) {
         if (isNullOrBlank(name)) {
-            throw new BadRequestException("Missing parameter - name");
+            throw new BadRequestException("Missing parameter - player name");
         }
         if (isTooLarge(name)) {
-            throw new BadRequestException("Name length must be less than 30 letters");
+            throw new BadRequestException("Player name length must be less than 30 letters");
         }
         if (!isValidNameFormat(name)) {
             throw new BadRequestException("Wrong format. Name must be latin letters only");

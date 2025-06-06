@@ -1,6 +1,7 @@
 package com.gladkiei.tennisscoreboard.servlet;
 
 import com.gladkiei.tennisscoreboard.dto.PlayerRequestDto;
+import com.gladkiei.tennisscoreboard.exception.BadRequestException;
 import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
 import com.gladkiei.tennisscoreboard.service.OngoingMatchService;
 import com.gladkiei.tennisscoreboard.validation.NameValidator;
@@ -21,16 +22,20 @@ public class NewMatchServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        String player1name = req.getParameter("player1");
-        nameValidator.validate(player1name);
+        try {
+            String player1name = req.getParameter("player1");
+            String player2name = req.getParameter("player2");
 
-        String player2name = req.getParameter("player2");
-        nameValidator.validate(player2name);
+            nameValidator.validate(player1name);
+            nameValidator.validate(player2name);
 
-        MatchScoreModel matchScoreModel = ongoingMatchService.startMatch(new PlayerRequestDto(player1name), new PlayerRequestDto(player2name));
-        UUID uuid = matchScoreModel.getUuid();
-
-        resp.sendRedirect("match-score" + "?uuid=" + uuid);
+            MatchScoreModel matchScoreModel = ongoingMatchService.startMatch(new PlayerRequestDto(player1name), new PlayerRequestDto(player2name));
+            UUID uuid = matchScoreModel.getUuid();
+            resp.sendRedirect("match-score" + "?uuid=" + uuid);
+        } catch (BadRequestException e) {
+            req.setAttribute("errorMessage", e.getMessage());
+            req.getRequestDispatcher("new-match.jsp").forward(req,resp);
+        }
     }
 
 }
