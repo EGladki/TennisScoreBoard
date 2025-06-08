@@ -20,13 +20,23 @@ public class GetMatchesServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Match> matches = matchDao.getAll();
+        String pageNumber = req.getParameter("page_number");
+        String playerName = req.getParameter("filter_by_player_name");
 
-        matches.sort(Comparator.comparing(match -> match.getPlayer1().getName()));
+//        if (pageNumber == null || pageNumber.isBlank()) {
+//            List<Match> matches = matchDao.getAll();
+//            req.setAttribute("matches", matches);
+//        }
 
-        List<Match> sorted = matches.stream().sorted().toList();
+        if (playerName == null || playerName.isBlank()) {
+            List<Match> matches = matchDao.getAll();
+            req.setAttribute("matches", matches);
+        } else {
+            List<Match> matches = matchDao.getAllPlayerMatches(playerName);
+            req.setAttribute("matches", matches);
 
-        req.setAttribute("matches", matches);
+        }
+
         req.getRequestDispatcher("/matches.jsp").forward(req, resp);
     }
 

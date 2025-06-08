@@ -62,12 +62,12 @@
 
       <form method="post" action="match-score?uuid=${uuid}" style="margin: 15px 0;">
         <input type="hidden" name="playerId" value="${player1.id}">
-        <button type="submit" class="btn">${player1.name} выиграл очко</button>
+        <button type="submit" class="btn">${player1.name} win score</button>
       </form>
 
       <form method="post" action="match-score?uuid=${uuid}" style="margin: 15px 0;">
         <input type="hidden" name="playerId" value="${player2.id}">
-        <button type="submit" class="btn">${player2.name} выиграл очко</button>
+        <button type="submit" class="btn">${player2.name} win score</button>
       </form>
 
       <div class="links" style="margin-top: 20px;">

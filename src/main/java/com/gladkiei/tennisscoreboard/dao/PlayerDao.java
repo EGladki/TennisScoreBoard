@@ -41,10 +41,6 @@ public class PlayerDao {
     }
 
     public Optional<Player> findByName(String name) {
-//        if (name == null || name.isBlank()) {
-//            return Optional.empty();
-//        }
-
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
             session.beginTransaction();
             Query<Player> query = session.createQuery("FROM Player WHERE name=:name", Player.class);
