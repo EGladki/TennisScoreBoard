@@ -17,6 +17,19 @@ INSERT INTO player (name) VALUES ('Bob');
 INSERT INTO player (name) VALUES ('Tom');
 
 INSERT INTO matches (player1_id, player2_id, winner_id) VALUES (1, 2, 1);
+INSERT INTO matches (player1_id, player2_id, winner_id) VALUES (1, 2, 1);
+INSERT INTO matches (player1_id, player2_id, winner_id) VALUES (1, 2, 1);
+INSERT INTO matches (player1_id, player2_id, winner_id) VALUES (1, 2, 1);
+INSERT INTO matches (player1_id, player2_id, winner_id) VALUES (1, 2, 1);
+INSERT INTO matches (player1_id, player2_id, winner_id) VALUES (1, 2, 1);
+INSERT INTO matches (player1_id, player2_id, winner_id) VALUES (1, 2, 1);
+INSERT INTO matches (player1_id, player2_id, winner_id) VALUES (1, 2, 1);
+INSERT INTO matches (player1_id, player2_id, winner_id) VALUES (1, 2, 1);
+INSERT INTO matches (player1_id, player2_id, winner_id) VALUES (1, 2, 1);
+INSERT INTO matches (player1_id, player2_id, winner_id) VALUES (1, 2, 1);
+INSERT INTO matches (player1_id, player2_id, winner_id) VALUES (1, 2, 1);
+
+INSERT INTO matches (player1_id, player2_id, winner_id) VALUES (1, 2, 1);
 INSERT INTO matches (player1_id, player2_id, winner_id) VALUES (3, 4, 3);
 INSERT INTO matches (player1_id, player2_id, winner_id) VALUES (5, 6, 5);
 INSERT INTO matches (player1_id, player2_id, winner_id) VALUES (7, 8, 8);

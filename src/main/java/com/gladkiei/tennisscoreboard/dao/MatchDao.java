@@ -8,18 +8,23 @@ import java.util.List;
 
 public class MatchDao {
 
-    public List<Match> getAll() {
+    public List<Match> getFiveResults(int startId) {
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
             return session.createQuery("""
                     SELECT m FROM Match m
                     JOIN FETCH m.player1
                     JOIN FETCH m.player2
                     LEFT JOIN FETCH m.winner
-                    """, Match.class).getResultList();
+                    WHERE m.id >= :startId
+                    ORDER BY m.id
+                    """, Match.class)
+                    .setParameter("startId", startId)
+                    .setMaxResults(5)
+                    .getResultList();
         }
     }
 
-    public List<Match> getAllPlayerMatches(String name) {
+    public List<Match> getFivePlayerMatches(String name, int startId) {
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
             return session.createQuery("""
                     SELECT m FROM Match m
@@ -27,8 +32,12 @@ public class MatchDao {
                     JOIN FETCH m.player2
                     LEFT JOIN FETCH m.winner
                     WHERE m.player1.name = :name OR m.player2.name = :name
+                    ORDER BY m.id
+                    LIMIT 5
                     """, Match.class)
                     .setParameter("name", name)
+                    .setFirstResult(startId - 1)
+                    .setMaxResults(5)
                     .getResultList();
         }
     }
@@ -40,4 +49,6 @@ public class MatchDao {
             session.getTransaction().commit();
         }
     }
+
+
 }
