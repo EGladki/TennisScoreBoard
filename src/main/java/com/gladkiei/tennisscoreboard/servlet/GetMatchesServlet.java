@@ -24,10 +24,10 @@ public class GetMatchesServlet extends HttpServlet {
         int page = getPageNumber(pageNumber);
 
         if (playerName == null || playerName.isBlank()) {
-            List<Match> matches = matchDao.getFiveResults(calculateStartIdForPagination(page));
+            List<Match> matches = matchDao.getFiveMatches(calculateStartIdForPagination(page));
             req.setAttribute("matches", matches);
         } else {
-            List<Match> matches = matchDao.getFivePlayerMatches(playerName, calculateStartIdForPagination(page));
+            List<Match> matches = matchDao.getFiveMatchesWithCurrentPlayer(playerName, calculateStartIdForPagination(page));
             req.setAttribute("matches", matches);
         }
 

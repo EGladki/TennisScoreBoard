@@ -4,13 +4,113 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tennis Scoreboard | Matches</title>
+    <title>Tennis Scoreboard | Players</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .players-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .players-title {
+            color: #8e605b;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .players-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .players-table th, .players-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #f4eae7;
+        }
+
+        .players-table th {
+            background-color: #8e605b;
+            color: #f4eae7;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .players-table tr:nth-child(even) {
+            background-color: #faf5f4;
+        }
+
+        .players-table tr:hover {
+            background-color: #f4eae7;
+        }
+
+        .player-name {
+            font-weight: 500;
+            color: #473a3d;
+        }
+
+        .player-stats {
+            font-weight: 400;
+            color: #8e605b;
+        }
+
+        .add-player-form {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #faf5f4;
+            border-radius: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #8e605b;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #cb7b6b;
+            border-radius: 8px;
+            background-color: #ffffff;
+            color: #473a3d;
+            font-size: 1rem;
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 12px;
+            background-color: #cb7b6b;
+            color: #ffffff;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .form-submit:hover {
+            background-color: #8e605b;
+        }
+    </style>
 </head>
 <body>
 
@@ -23,68 +123,34 @@
         <nav class="nav-links">
             <a href="index.jsp">Home</a>
             <a href="matches">Matches</a>
+            <a href="players" class="active">Players</a>
         </nav>
     </section>
 </header>
 
-<%--<ul>--%>
-<%--    <c:forEach var="match" items="${matches}">--%>
-<%--        <li>--%>
-<%--            Match #${match.id}:--%>
-<%--                ${match.player1.name} vs ${match.player2.name}--%>
-<%--            Winner: ${match.winner.name}--%>
-<%--        </li>--%>
-<%--    </c:forEach>--%>
-<%--</ul>--%>
+<main>
+    <div class="container">
+        <div class="players-container">
+            <h1 class="players-title">Players</h1>
 
-<%--<main>--%>
-<%--    <div class="container">--%>
-<%--        <h1>Players</h1>--%>
+            <table class="players-table">
+                <thead>
+                <tr>
+                    <th>Player</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach var="player" items="${players}">
+                    <tr>
+                        <td class="player-name">${player.name}</td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
 
-
-<%--    </div>--%>
-<%--</main>--%>
-
-<h1>Players</h1>
-<ul>
-    <c:forEach var="player" items="${players}">
-        <li>
-            ${player.id} ${player.name}
-        </li>
-    </c:forEach>
-
-</ul>
-
-<%--<main>--%>
-<%--    <div class="container">--%>
-<%--        <h1 class="page-title">Matches</h1>--%>
-<%--        <div class="form-container">--%>
-<%--            <c:choose>--%>
-<%--                <c:when test="${empty matches}">--%>
-<%--                    <p>No matches found.</p>--%>
-<%--                </c:when>--%>
-<%--                <c:otherwise>--%>
-<%--                    <ul style="list-style: none; padding: 0; margin: 0;">--%>
-<%--                        <c:forEach var="match" items="${matches}">--%>
-<%--                            <li style="margin-bottom: 15px; padding: 15px; border-radius: 12px; background-color: #f4eae7; border: 1px solid #cb7b6b;">--%>
-<%--                                <div style="color: #473a3d; font-weight: 500;">--%>
-<%--                                    Match #${match.id}:--%>
-<%--                                    <strong>${match.player1.name}</strong> vs <strong>${match.player2.name}</strong><br>--%>
-<%--                                    Winner: <span style="color: #8e605b; font-weight: bold;">${match.winner.name}</span>--%>
-<%--                                </div>--%>
-<%--                            </li>--%>
-<%--                        </c:forEach>--%>
-<%--                    </ul>--%>
-<%--                </c:otherwise>--%>
-<%--            </c:choose>--%>
-<%--        </div>--%>
-
-<%--        <div class="links">--%>
-<%--            <a href="new-match.jsp">Start New Match</a>--%>
-<%--            <a href="players">Player List</a>--%>
-<%--        </div>--%>
-<%--    </div>--%>
-<%--</main>--%>
+        </div>
+    </div>
+</main>
 
 <footer>
     <p>&copy; Tennis Scoreboard, project from

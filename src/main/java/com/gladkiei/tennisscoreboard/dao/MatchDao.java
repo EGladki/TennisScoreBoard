@@ -8,7 +8,7 @@ import java.util.List;
 
 public class MatchDao {
 
-    public List<Match> getFiveResults(int startId) {
+    public List<Match> getFiveMatches(int startId) {
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
             return session.createQuery("""
                     SELECT m FROM Match m
@@ -24,7 +24,7 @@ public class MatchDao {
         }
     }
 
-    public List<Match> getFivePlayerMatches(String name, int startId) {
+    public List<Match> getFiveMatchesWithCurrentPlayer(String name, int startId) {
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
             return session.createQuery("""
                     SELECT m FROM Match m

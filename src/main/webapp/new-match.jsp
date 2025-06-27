@@ -23,6 +23,7 @@
         <nav class="nav-links">
             <a href="index.jsp">Home</a>
             <a href="matches">Matches</a>
+            <a class="nav-link" href="players">Players</a>
         </nav>
     </section>
 </header>

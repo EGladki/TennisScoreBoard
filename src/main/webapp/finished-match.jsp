@@ -71,6 +71,7 @@
             <nav class="nav-links">
                 <a class="nav-link" href="index.jsp">Home</a>
                 <a class="nav-link" href="matches">Matches</a>
+                <a class="nav-link" href="players">Players</a>
             </nav>
         </div>
     </section>

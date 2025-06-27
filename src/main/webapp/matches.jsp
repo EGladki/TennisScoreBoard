@@ -11,6 +11,110 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Дополнительные стили для таблицы */
+        .table-container {
+            overflow-x: auto;
+            margin: 30px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-matches {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            color: #473a3d;
+        }
+
+        .table-matches th, .table-matches td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #f4eae7;
+        }
+
+        .table-matches th {
+            background-color: #8e605b;
+            color: #f4eae7;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .table-matches tr:nth-child(even) {
+            background-color: #faf5f4;
+        }
+
+        .table-matches tr:hover {
+            background-color: #f4eae7;
+        }
+
+        .table-matches .winner-cell {
+            font-weight: 500;
+            color: #8e605b;
+        }
+
+        .input-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            align-items: center;
+        }
+
+        .input-filter {
+            padding: 10px 15px;
+            border: 2px solid #cb7b6b;
+            border-radius: 8px;
+            background-color: #f4eae7;
+            color: #473a3d;
+            font-size: 1rem;
+            width: 300px;
+            max-width: 100%;
+        }
+
+        .btn-filter {
+            padding: 10px 20px;
+            background-color: #cb7b6b;
+            color: #ffffff;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .btn-filter:hover {
+            background-color: #8e605b;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .pagination a {
+            padding: 8px 15px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #473a3d;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .pagination a:hover:not(.current) {
+            background-color: #f4eae7;
+        }
+
+        .pagination .current {
+            background-color: #8e605b;
+            color: #f4eae7;
+        }
+    </style>
 </head>
 <body>
 
@@ -23,19 +127,10 @@
         <nav class="nav-links">
             <a href="index.jsp">Home</a>
             <a href="matches">Matches</a>
+            <a href="players">Players</a>
         </nav>
     </section>
 </header>
-
-<ul>
-    <c:forEach var="match" items="${matches}">
-        <li>
-            Match #${match.id}:
-                ${match.player1.name} vs ${match.player2.name}
-            Winner: ${match.winner.name}
-        </li>
-    </c:forEach>
-</ul>
 
 <main>
     <div class="container">
@@ -49,81 +144,36 @@
             </div>
         </div>
 
-        <table class="table-matches">
-
-
-            <tr>
-                <th>Player One</th>
-                <th>Player Two</th>
-                <th>Winner</th>
-            </tr>
-            <tr>
-                <td>Rafael Nadal</td>
-                <td>Roger Federer</td>
-                <td><span class="winner-name-td">Rafael Nadal</span></td>
-            </tr>
-            <tr>
-                <td>Rafael Nadal</td>
-                <td>Roger Federer</td>
-                <td><span class="winner-name-td">Roger Federer</span></td>
-            </tr>
-            <tr>
-                <td>Rafael Nadal</td>
-                <td>Roger Federer</td>
-                <td><span class="winner-name-td">Rafael Nadal</span></td>
-            </tr>
-            <tr>
-                <td>Rafael Nadal</td>
-                <td>Roger Federer</td>
-                <td><span class="winner-name-td">Roger Federer</span></td>
-            </tr>
-            <tr>
-                <td>Rafael Nadal</td>
-                <td>Roger Federer</td>
-                <td><span class="winner-name-td">Rafael Nadal</span></td>
-            </tr>
-        </table>
+        <div class="table-container">
+            <table class="table-matches">
+                <thead>
+                <tr>
+                    <th>Player One</th>
+                    <th>Player Two</th>
+                    <th>Winner</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach var="match" items="${matches}">
+                    <tr>
+                        <td>${match.player1.name}</td>
+                        <td>${match.player2.name}</td>
+                        <td class="winner-cell">${match.winner.name}</td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
 
         <div class="pagination">
-            <a class="prev" href="#"> < </a>
+            <a class="prev" href="#"> &lt; </a>
             <a class="num-page current" href="#">1</a>
             <a class="num-page" href="#">2</a>
             <a class="num-page" href="#">3</a>
-            <a class="next" href="#"> > </a>
+            <a class="next" href="#"> &gt; </a>
         </div>
     </div>
 </main>
-
-<%--<main>--%>
-<%--    <div class="container">--%>
-<%--        <h1 class="page-title">Matches</h1>--%>
-<%--        <div class="form-container">--%>
-<%--            <c:choose>--%>
-<%--                <c:when test="${empty matches}">--%>
-<%--                    <p>No matches found.</p>--%>
-<%--                </c:when>--%>
-<%--                <c:otherwise>--%>
-<%--                    <ul style="list-style: none; padding: 0; margin: 0;">--%>
-<%--                        <c:forEach var="match" items="${matches}">--%>
-<%--                            <li style="margin-bottom: 15px; padding: 15px; border-radius: 12px; background-color: #f4eae7; border: 1px solid #cb7b6b;">--%>
-<%--                                <div style="color: #473a3d; font-weight: 500;">--%>
-<%--                                    Match #${match.id}:--%>
-<%--                                    <strong>${match.player1.name}</strong> vs <strong>${match.player2.name}</strong><br>--%>
-<%--                                    Winner: <span style="color: #8e605b; font-weight: bold;">${match.winner.name}</span>--%>
-<%--                                </div>--%>
-<%--                            </li>--%>
-<%--                        </c:forEach>--%>
-<%--                    </ul>--%>
-<%--                </c:otherwise>--%>
-<%--            </c:choose>--%>
-<%--        </div>--%>
-
-<%--        <div class="links">--%>
-<%--            <a href="new-match.jsp">Start New Match</a>--%>
-<%--            <a href="players">Player List</a>--%>
-<%--        </div>--%>
-<%--    </div>--%>
-<%--</main>--%>
 
 <footer>
     <p>&copy; Tennis Scoreboard, project from

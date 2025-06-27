@@ -22,7 +22,7 @@ public class PlayerDao {
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
             session.beginTransaction();
 
-            List<Player> players = session.createQuery("FROM Player", Player.class).getResultList();
+            List<Player> players = session.createQuery("FROM Player order by id", Player.class).getResultList();
 
             session.getTransaction().commit();
             return players;
