@@ -137,8 +137,6 @@
         <h1>Matches</h1>
         <div class="input-container">
             <form action="matches" method="get" class="input-container">
-
-<%--            <input class="input-filter" placeholder="Filter by name" type="text"/>--%>
                 <input name="filter_by_player_name"
                        class="input-filter"
                        placeholder="Filter by name"
@@ -168,11 +166,31 @@
             </table>
         </div>
 
+
+<%--        <div class="pagination">--%>
+<%--            <a class="prev" href="#"> &lt; </a>--%>
+<%--            <a class="num-page current" href="matches?page_number=1">1</a>--%>
+<%--            <a class="num-page" href="matches?page_number=2">2</a>--%>
+<%--            <a class="num-page" href="matches?page_number=3">3</a>--%>
+<%--            <a class="num-page" href="matches?page_number=4">4</a>--%>
+<%--            <a class="num-page" href="matches?page_number=5">5</a>--%>
+<%--            <a class="num-page" href="matches?page_number=6">6</a>--%>
+<%--            <a class="next" href="#"> &gt; </a>--%>
+<%--        </div>--%>
+
         <div class="pagination">
             <a class="prev" href="#"> &lt; </a>
-            <a class="num-page current" href="#">1</a>
-            <a class="num-page" href="#">2</a>
-            <a class="num-page" href="#">3</a>
+            <c:forEach begin="1" end="${totalPages}" var="page">
+                <a href ="matches?page_number=${page}">${page}</a>
+            </c:forEach>
+
+<%--            <a class="num-page current" href="matches?page_number=1">1</a>--%>
+<%--            <a class="num-page" href="matches?page_number=2">2</a>--%>
+<%--            <a class="num-page" href="matches?page_number=3">3</a>--%>
+<%--            <a class="num-page" href="matches?page_number=4">4</a>--%>
+<%--            <a class="num-page" href="matches?page_number=5">5</a>--%>
+<%--            <a class="num-page" href="matches?page_number=6">6</a>--%>
+
             <a class="next" href="#"> &gt; </a>
         </div>
     </div>

@@ -2,6 +2,7 @@ package com.gladkiei.tennisscoreboard.servlet;
 
 import com.gladkiei.tennisscoreboard.dao.MatchDao;
 import com.gladkiei.tennisscoreboard.models.Match;
+import com.gladkiei.tennisscoreboard.service.PaginationService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,7 +15,9 @@ import java.util.List;
 @WebServlet("/matches")
 public class GetMatchesServlet extends HttpServlet {
 
+
     private final MatchDao matchDao = new MatchDao();
+    private final PaginationService paginationService = new PaginationService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -23,16 +26,22 @@ public class GetMatchesServlet extends HttpServlet {
 
         int page = getPageNumber(pageNumber);
 
+        int totalPages = paginationService.getCountOfPages(matchDao.getCountOfMatches());
+
         if (playerName == null || playerName.isBlank()) {
-            List<Match> matches = matchDao.getFiveMatches(calculateStartIdForPagination(page));
+            List<Match> matches = matchDao.getFiveMatches(paginationService.calculateStartIdForPagination(page));
             req.setAttribute("matches", matches);
+            req.setAttribute("page", page);
+            req.setAttribute("totalPages", totalPages);
         } else {
-            List<Match> matches = matchDao.getFiveMatchesWithCurrentPlayer(playerName, calculateStartIdForPagination(page));
+            List<Match> matches = matchDao.getFiveMatchesWithCurrentPlayer(playerName, paginationService.calculateStartIdForPagination(page));
             req.setAttribute("matches", matches);
+            req.setAttribute("page", page);
+            req.setAttribute("totalPages", totalPages);
+
         }
 
         req.getRequestDispatcher("/matches.jsp").forward(req, resp);
-
 
     }
 
@@ -41,14 +50,6 @@ public class GetMatchesServlet extends HttpServlet {
             return 1;
         } else {
             return Integer.parseInt(pageNumber);
-        }
-    }
-
-    private int calculateStartIdForPagination(int page) {
-        if (page == 1) {
-            return page;
-        } else {
-            return (page - 1) * 5 + 1;
         }
     }
 
