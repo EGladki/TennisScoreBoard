@@ -1,10 +1,7 @@
 package com.gladkiei.tennisscoreboard.service;
 
-import com.gladkiei.tennisscoreboard.dao.MatchDao;
-
 public class PaginationService {
     private static final int RESULTS_ON_PAGE = 5;
-    private final MatchDao matchDao = new MatchDao();
 
     public int getCountOfPages(int countOfMatches) {
         if (countOfMatches <= RESULTS_ON_PAGE) {

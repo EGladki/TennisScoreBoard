@@ -26,16 +26,22 @@ public class GetMatchesServlet extends HttpServlet {
 
         int page = getPageNumber(pageNumber);
 
-        int totalPages = paginationService.getCountOfPages(matchDao.getCountOfMatches());
 
         if (playerName == null || playerName.isBlank()) {
             List<Match> matches = matchDao.getFiveMatches(paginationService.calculateStartIdForPagination(page));
+
+            int totalPages = paginationService.getCountOfPages(matchDao.getCountOfMatches());
+
             req.setAttribute("matches", matches);
             req.setAttribute("page", page);
             req.setAttribute("totalPages", totalPages);
         } else {
             List<Match> matches = matchDao.getFiveMatchesWithCurrentPlayer(playerName, paginationService.calculateStartIdForPagination(page));
+
+            int totalPages = paginationService.getCountOfPages(matchDao.getCountOfMatchesWithCurrentPlayer(playerName));
+
             req.setAttribute("matches", matches);
+            req.setAttribute("playerName", playerName);
             req.setAttribute("page", page);
             req.setAttribute("totalPages", totalPages);
 

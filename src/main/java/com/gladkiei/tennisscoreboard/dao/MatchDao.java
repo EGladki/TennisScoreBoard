@@ -45,9 +45,22 @@ public class MatchDao {
     public int getCountOfMatches() {
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
             Long l = session.createQuery("""
-                            SELECT count (m) FROM Match m
-                            
+                            SELECT count(m) FROM Match m
+
                             """, Long.class)
+                    .getResultList()
+                    .get(0);
+            return l.intValue();
+        }
+    }
+
+    public int getCountOfMatchesWithCurrentPlayer(String name) {
+        try (Session session = HibernateUtils.getSessionFactory().openSession()) {
+            Long l = session.createQuery("""
+                            SELECT count(m) FROM Match m
+                            WHERE m.player1.name = :name OR m.player2.name = :name
+                            """, Long.class)
+                    .setParameter("name", name)
                     .getResultList()
                     .get(0);
             return l.intValue();
