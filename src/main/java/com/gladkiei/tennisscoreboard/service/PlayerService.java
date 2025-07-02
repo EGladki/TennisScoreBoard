@@ -23,13 +23,13 @@ public class PlayerService {
     }
 
     private PlayerResponseDto getPlayerResponseDtoFromDao(PlayerRequestDto playerRequestDto) {
-        Optional<Player> player = playerDao.findByName(playerRequestDto.getName());
+        Optional<Player> player = playerDao.getByName(playerRequestDto.getName());
         return convertToDto(player.get());
     }
 
     private boolean isPlayerAlreadyExist(PlayerRequestDto playerRequestDto) {
         Player player = convertToPlayer(playerRequestDto);
-        Optional<Player> optional = playerDao.findByName(player.getName());
+        Optional<Player> optional = playerDao.getByName(player.getName());
         return optional.isPresent();
     }
 }

@@ -28,9 +28,9 @@ public class FinishedMatchesPersistenceService {
 
     private Match createCompletedMatch(UUID uuid, Long winnerId) {
         MatchScoreModel model = MatchScoreModelDao.getInstance().getModel(uuid);
-        Player player1 = playerDao.findById(model.getPlayer1ScoreModel().getPlayerId());
-        Player player2 = playerDao.findById(model.getPlayer2ScoreModel().getPlayerId());
-        Player winner = playerDao.findById(winnerId);
+        Player player1 = playerDao.getById(model.getPlayer1ScoreModel().getPlayerId());
+        Player player2 = playerDao.getById(model.getPlayer2ScoreModel().getPlayerId());
+        Player winner = playerDao.getById(winnerId);
         return new Match(player1, player2, winner);
     }
 

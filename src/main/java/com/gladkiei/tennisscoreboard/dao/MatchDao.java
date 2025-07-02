@@ -46,7 +46,7 @@ public class MatchDao {
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
             Long l = session.createQuery("""
                             SELECT count(m) FROM Match m
-
+                            
                             """, Long.class)
                     .getResultList()
                     .get(0);
@@ -74,6 +74,5 @@ public class MatchDao {
             session.getTransaction().commit();
         }
     }
-
 
 }

@@ -4,19 +4,17 @@ import com.gladkiei.tennisscoreboard.dao.MatchScoreModelDao;
 import com.gladkiei.tennisscoreboard.enums.MatchState;
 import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
 import com.gladkiei.tennisscoreboard.models.PlayerScoreModel;
+import com.gladkiei.tennisscoreboard.service.scorestrategies.MatchScoreCalculationService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.UUID;
 
 import static com.gladkiei.tennisscoreboard.enums.MatchState.*;
 import static com.gladkiei.tennisscoreboard.enums.WinnerStatus.NOT_WINNER;
 import static com.gladkiei.tennisscoreboard.enums.WinnerStatus.WINNER;
-import static com.gladkiei.tennisscoreboard.service.MatchScoreCalculationService.*;
+import static com.gladkiei.tennisscoreboard.service.scorestrategies.MatchScoreCalculationService.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MatchScoreCalculationServiceTest {

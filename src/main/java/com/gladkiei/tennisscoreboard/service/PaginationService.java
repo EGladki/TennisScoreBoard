@@ -22,6 +22,4 @@ public class PaginationService {
             return (page - 1) * RESULTS_ON_PAGE + 1;
         }
     }
-
-
 }

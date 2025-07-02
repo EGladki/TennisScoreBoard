@@ -1,4 +1,4 @@
-package com.gladkiei.tennisscoreboard.service;
+package com.gladkiei.tennisscoreboard.service.scorestrategies;
 
 import com.gladkiei.tennisscoreboard.dao.MatchScoreModelDao;
 import com.gladkiei.tennisscoreboard.enums.MatchState;
@@ -16,9 +16,9 @@ import static com.gladkiei.tennisscoreboard.service.OngoingMatchService.START_SC
 public class MatchScoreCalculationService {
     private final static int ZERO = 0;
     final static int ONE_POINT = 1;
-    final static int FIRST_ADDING_SCORE = 15;
-    final static int SECOND_ADDING_SCORE = 15;
-    final static int THIRD_ADDING_SCORE = 10;
+    public final static int FIRST_ADDING_SCORE = 15;
+    public final static int SECOND_ADDING_SCORE = 15;
+    public final static int THIRD_ADDING_SCORE = 10;
     private final static int MAX_SCORE = 40;
     private final static int MAX_GAMES = 6;
     private final static int MAX_SETS = 2;
@@ -31,7 +31,6 @@ public class MatchScoreCalculationService {
             IN_PROGRESS, new CommonScoreStrategy(this),
             DEUCE, new DeuceScoreStrategy(this),
             TIEBREAK, new TiebreakScoreStrategy(this));
-
 
     public void updateScore(UUID uuid, Long winnerId) {
         MatchScoreModel matchScoreModel = matchScoreModelDao.getModel(uuid);
@@ -59,7 +58,7 @@ public class MatchScoreCalculationService {
         }
     }
 
-    void updateGame(MatchScoreModel matchScoreModel, Long winnerId) {
+    public void updateGame(MatchScoreModel matchScoreModel, Long winnerId) {
         PlayerScoreModel winner = getWinner(winnerId, matchScoreModel);
 
         winner.setPlayerGame(winner.getPlayerGame() + ONE_POINT);
@@ -67,7 +66,7 @@ public class MatchScoreCalculationService {
         resetScore(matchScoreModel);
     }
 
-    void updateSet(MatchScoreModel matchScoreModel, Long winnerId) {
+    public void updateSet(MatchScoreModel matchScoreModel, Long winnerId) {
         PlayerScoreModel winner = getWinner(winnerId, matchScoreModel);
         winner.setPlayerSet(winner.getPlayerSet() + ONE_POINT);
 
@@ -140,13 +139,13 @@ public class MatchScoreCalculationService {
         int player2Score = matchScoreModel.getPlayer2ScoreModel().getPlayerScore();
 
         return (player1Score >= TIEBREAK_SCORE_TO_WIN && (player1Score - player2Score) >= DIFFERENCE_IN_SCORES_TO_WIN_TIEBREAK) ||
-                (player2Score >= TIEBREAK_SCORE_TO_WIN && (player2Score - player1Score) >= DIFFERENCE_IN_SCORES_TO_WIN_TIEBREAK);
+               (player2Score >= TIEBREAK_SCORE_TO_WIN && (player2Score - player1Score) >= DIFFERENCE_IN_SCORES_TO_WIN_TIEBREAK);
     }
 
     private boolean needsExtraGameBeforeWin(MatchScoreModel matchScoreModel) {
         int player1Game = matchScoreModel.getPlayer1ScoreModel().getPlayerGame();
         int player2Game = matchScoreModel.getPlayer2ScoreModel().getPlayerGame();
-        return ((player1Game == 5 && player2Game == 6) || (player1Game == 6 && player2Game == 5));
+        return ((player1Game == MAX_GAMES - 1 && player2Game == MAX_GAMES) || (player1Game == MAX_GAMES && player2Game == MAX_GAMES - 1));
     }
 
 }

@@ -4,7 +4,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Завершённый матч</title>
+    <title>Finished match</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
@@ -98,6 +98,11 @@
         <a href="new-match.jsp" class="back-link">Create new match</a>
     </div>
 </main>
-
+<footer>
+    <div class="footer">
+        <p>&copy; Tennis Scoreboard, project from <a href="https://zhukovsd.github.io/java-backend-learning-course/">zhukovsd/java-backend-learning-course</a>
+            roadmap.</p>
+    </div>
+</footer>
 </body>
 </html>

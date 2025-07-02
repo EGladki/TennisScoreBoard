@@ -1,11 +1,11 @@
-package com.gladkiei.tennisscoreboard.service;
+package com.gladkiei.tennisscoreboard.service.scorestrategies;
 
 import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
 import com.gladkiei.tennisscoreboard.models.PlayerScoreModel;
 
 import static com.gladkiei.tennisscoreboard.enums.MatchState.IN_PROGRESS;
-import static com.gladkiei.tennisscoreboard.service.MatchScoreCalculationService.LESS;
-import static com.gladkiei.tennisscoreboard.service.MatchScoreCalculationService.MORE;
+import static com.gladkiei.tennisscoreboard.service.scorestrategies.MatchScoreCalculationService.LESS;
+import static com.gladkiei.tennisscoreboard.service.scorestrategies.MatchScoreCalculationService.MORE;
 
 public class DeuceScoreStrategy implements ScoreStrategy {
     private final MatchScoreCalculationService matchScoreCalculationService;

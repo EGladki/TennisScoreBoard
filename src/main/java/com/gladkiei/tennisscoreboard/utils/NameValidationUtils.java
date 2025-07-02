@@ -1,14 +1,14 @@
-package com.gladkiei.tennisscoreboard.validation;
+package com.gladkiei.tennisscoreboard.utils;
 
 import com.gladkiei.tennisscoreboard.exception.BadRequestException;
 
-public class NameValidator {
+public class NameValidationUtils {
     public void validate(String name) {
         if (isNullOrBlank(name)) {
             throw new BadRequestException("Missing parameter - player name");
         }
         if (isTooLarge(name)) {
-            throw new BadRequestException("Player name length must be less than 30 letters");
+            throw new BadRequestException("Name must be less than 30 letters");
         }
         if (!isValidNameFormat(name)) {
             throw new BadRequestException("Wrong format. Name must be latin letters only");

@@ -5,7 +5,7 @@ import com.gladkiei.tennisscoreboard.dao.PlayerDao;
 import com.gladkiei.tennisscoreboard.models.Match;
 import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
 import com.gladkiei.tennisscoreboard.service.FinishedMatchesPersistenceService;
-import com.gladkiei.tennisscoreboard.service.MatchScoreCalculationService;
+import com.gladkiei.tennisscoreboard.service.scorestrategies.MatchScoreCalculationService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -39,21 +39,19 @@ public class MatchScoreServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String playerId = req.getParameter("playerId");
         long id = Long.parseLong(playerId);
 
         UUID uuid = UUID.fromString(req.getParameter("uuid"));
         matchScoreCalculationService.updateScore(uuid, id);
-
         resp.sendRedirect("match-score" + "?uuid=" + uuid);
-
     }
 
     private void setAllAttributesForModel(HttpServletRequest req, UUID uuid, MatchScoreModel matchScoreModel) {
         req.setAttribute("uuid", uuid.toString());
-        req.setAttribute("player1", playerDao.findById(matchScoreModel.getPlayer1ScoreModel().getPlayerId()));
-        req.setAttribute("player2", playerDao.findById(matchScoreModel.getPlayer2ScoreModel().getPlayerId()));
+        req.setAttribute("player1", playerDao.getById(matchScoreModel.getPlayer1ScoreModel().getPlayerId()));
+        req.setAttribute("player2", playerDao.getById(matchScoreModel.getPlayer2ScoreModel().getPlayerId()));
         req.setAttribute("player1Score", matchScoreModel.getPlayer1ScoreModel().getPlayerScore());
         req.setAttribute("player2Score", matchScoreModel.getPlayer2ScoreModel().getPlayerScore());
         req.setAttribute("player1Game", matchScoreModel.getPlayer1ScoreModel().getPlayerGame());

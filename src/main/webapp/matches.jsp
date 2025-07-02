@@ -149,7 +149,7 @@
                 "${not empty param.filter_by_player_name ? 'filter_by_player_name='.concat(param.filter_by_player_name) : ''}">
         </c:set>
 
-        <c:set var="currentPage" value="${not empty param.page_number ? param.page_number : 1}"/>
+        <c:set var="page" value="${not empty param.page ? param.page : 1}"/>
 
         <div class="table-container">
             <table class="table-matches">
@@ -173,14 +173,20 @@
         </div>
 
         <div class="pagination">
-            <a class="prev" href="matches?${filterParamName}&page_number=${currentPage > 1 ? currentPage - 1 : 1}"> &lt; </a>
+            <a class="prev" href="matches?${filterParamName}&page=${page > 1 ? page - 1 : 1}"> &lt; </a>
 
-            <c:forEach begin="1" end="${totalPages}" var="currentPage">
-                <a class="current" href="matches?${filterParamName}&page_number=${currentPage}">${currentPage}</a>
-
+            <c:forEach begin="1" end="${totalPages}" var="i">
+                <c:choose>
+                    <c:when test="${i == page}">
+                        <a class="current" href="matches?${filterParamName}&page=${i}">${i}</a>
+                    </c:when>
+                    <c:otherwise>
+                        <a href="matches?${filterParamName}&page=${i}">${i}</a>
+                    </c:otherwise>
+                </c:choose>
             </c:forEach>
 
-            <a class="next" href="matches?${filterParamName}&page_number=${currentPage < totalPages ? currentPage + 1 : totalPages}"> &gt; </a>
+            <a class="next" href="matches?${filterParamName}&page=${page < totalPages ? page + 1 : totalPages}"> &gt; </a>
         </div>
     </div>
 </main>

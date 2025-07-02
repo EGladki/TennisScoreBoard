@@ -1,26 +1,21 @@
 package com.gladkiei.tennisscoreboard.service;
 
 import com.gladkiei.tennisscoreboard.dao.MatchScoreModelDao;
-import com.gladkiei.tennisscoreboard.dao.PlayerDao;
 import com.gladkiei.tennisscoreboard.dto.PlayerRequestDto;
 import com.gladkiei.tennisscoreboard.dto.PlayerResponseDto;
 import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
-import com.gladkiei.tennisscoreboard.models.Player;
 import com.gladkiei.tennisscoreboard.models.PlayerScoreModel;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import static com.gladkiei.tennisscoreboard.enums.MatchState.IN_PROGRESS;
 import static com.gladkiei.tennisscoreboard.enums.WinnerStatus.NOT_WINNER;
-import static com.gladkiei.tennisscoreboard.utils.MappingUtils.convertToDto;
-import static com.gladkiei.tennisscoreboard.utils.MappingUtils.convertToPlayer;
 
 public class OngoingMatchService {
 
-    static final int START_SCORE = 0;
-    static final int START_GAME = 0;
-    static final int START_SET = 0;
+    public static final int START_SCORE = 0;
+    public static final int START_GAME = 0;
+    public static final int START_SET = 0;
     private final PlayerService playerService = new PlayerService();
 
     public MatchScoreModel startMatch(PlayerRequestDto player1RequestDto, PlayerRequestDto player2RequestDto) {

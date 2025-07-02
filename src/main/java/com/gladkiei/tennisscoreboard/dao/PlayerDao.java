@@ -18,7 +18,7 @@ public class PlayerDao {
         }
     }
 
-    public List<Player> findAll() {
+    public List<Player> getAll() {
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
             session.beginTransaction();
 
@@ -29,7 +29,7 @@ public class PlayerDao {
         }
     }
 
-    public Player findById(Long id) {
+    public Player getById(Long id) {
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
             session.beginTransaction();
 
@@ -40,7 +40,7 @@ public class PlayerDao {
         }
     }
 
-    public Optional<Player> findByName(String name) {
+    public Optional<Player> getByName(String name) {
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
             session.beginTransaction();
             Query<Player> query = session.createQuery("FROM Player WHERE name=:name", Player.class);
