@@ -12,7 +12,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Дополнительные стили для таблицы */
         .table-container {
             overflow-x: auto;
             margin: 30px 0;
@@ -114,6 +113,7 @@
             background-color: #8e605b;
             color: #f4eae7;
         }
+
     </style>
 </head>
 <body>
@@ -136,29 +136,20 @@
     <div class="container">
         <h1>Matches</h1>
         <div class="input-container">
-
             <form action="matches" method="get" class="input-container">
                 <input name="filter_by_player_name"
                        class="input-filter"
                        placeholder="Filter by name"
-                       type="text"
-                       value="${param.filter_by_player_name}"/>
+                       type="text"/>
                 <button type="submit" class="btn-filter">Select</button>
-
-                <!-- Добавьте скрытое поле для текущей страницы -->
-                <input type="hidden" name="page_number" value="${currentPage}"/>
             </form>
-
-<%--            <form action="matches" method="get" class="input-container">--%>
-<%--                <input name="filter_by_player_name"--%>
-<%--                       class="input-filter"--%>
-<%--                       placeholder="Filter by name"--%>
-<%--                       type="text"--%>
-<%--                       value="${param.filter_by_player_name}"/>--%>
-
-<%--                <button type="submit" class="btn-filter">Select</button>--%>
-<%--            </form>--%>
         </div>
+
+        <c:set var="filterParamName" value=
+                "${not empty param.filter_by_player_name ? 'filter_by_player_name='.concat(param.filter_by_player_name) : ''}">
+        </c:set>
+
+        <c:set var="currentPage" value="${not empty param.page_number ? param.page_number : 1}"/>
 
         <div class="table-container">
             <table class="table-matches">
@@ -181,27 +172,16 @@
             </table>
         </div>
 
-
         <div class="pagination">
+            <a class="prev" href="matches?${filterParamName}&page_number=${currentPage > 1 ? currentPage - 1 : 1}"> &lt; </a>
 
+            <c:forEach begin="1" end="${totalPages}" var="currentPage">
+                <a class="current" href="matches?${filterParamName}&page_number=${currentPage}">${currentPage}</a>
 
-            <c:forEach begin="1" end="${totalPages}" var="page">
-                <a href="matches?page_number=${page}&filter_by_player_name=${param.filter_by_player_name}"
-                   class="${page == currentPage ? 'active' : ''}">
-                        ${page}
-                </a>
             </c:forEach>
 
+            <a class="next" href="matches?${filterParamName}&page_number=${currentPage < totalPages ? currentPage + 1 : totalPages}"> &gt; </a>
         </div>
-
-<%--        <div class="pagination">--%>
-<%--            &lt;%&ndash;            <a class="prev" href="#"> &lt; </a>&ndash;%&gt;--%>
-<%--            <c:forEach begin="1" end="${totalPages}" var="page">--%>
-<%--                <a href="matches?page_number=${page}&filter_by_player_name=${filter_by_player_name}">${page}</a>--%>
-<%--            </c:forEach>--%>
-
-<%--            &lt;%&ndash;            <a class="next" href="#"> &gt; </a>&ndash;%&gt;--%>
-<%--        </div>--%>
     </div>
 </main>
 

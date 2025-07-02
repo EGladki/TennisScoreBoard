@@ -55,8 +55,6 @@
     </div>
 </main>
 
-
-
 <footer>
     <p>&copy; Tennis Scoreboard, project from
         <a href="https://zhukovsd.github.io/java-backend-learning-course/" target="_blank">

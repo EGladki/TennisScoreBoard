@@ -24,25 +24,25 @@ public class GetMatchesServlet extends HttpServlet {
         String pageNumber = req.getParameter("page_number");
         String playerName = req.getParameter("filter_by_player_name");
 
-        int page = getPageNumber(pageNumber);
+        int currentPage = getPageNumber(pageNumber);
 
 
         if (playerName == null || playerName.isBlank()) {
-            List<Match> matches = matchDao.getFiveMatches(paginationService.calculateStartIdForPagination(page));
+            List<Match> matches = matchDao.getFiveMatches(paginationService.calculateStartIdForPagination(currentPage));
 
             int totalPages = paginationService.getCountOfPages(matchDao.getCountOfMatches());
 
             req.setAttribute("matches", matches);
-            req.setAttribute("page", page);
+            req.setAttribute("currentPage", currentPage);
             req.setAttribute("totalPages", totalPages);
         } else {
-            List<Match> matches = matchDao.getFiveMatchesWithCurrentPlayer(playerName, paginationService.calculateStartIdForPagination(page));
+            List<Match> matches = matchDao.getFiveMatchesWithCurrentPlayer(playerName, paginationService.calculateStartIdForPagination(currentPage));
 
             int totalPages = paginationService.getCountOfPages(matchDao.getCountOfMatchesWithCurrentPlayer(playerName));
 
             req.setAttribute("matches", matches);
             req.setAttribute("playerName", playerName);
-            req.setAttribute("page", page);
+            req.setAttribute("currentPage", currentPage);
             req.setAttribute("totalPages", totalPages);
 
         }
