@@ -1,8 +1,10 @@
 package com.gladkiei.tennisscoreboard.dao;
 
+import com.gladkiei.tennisscoreboard.exception.DatabaseOperationException;
 import com.gladkiei.tennisscoreboard.models.Player;
 import com.gladkiei.tennisscoreboard.utils.HibernateUtils;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import java.util.List;
@@ -11,10 +13,16 @@ import java.util.Optional;
 public class PlayerDao {
 
     public void save(Player player) {
+        Transaction transaction = null;
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
-            session.beginTransaction();
+            transaction = session.beginTransaction();
             session.persist(player);
-            session.getTransaction().commit();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new DatabaseOperationException("Failed to save player in database", e);
         }
     }
 
@@ -26,6 +34,8 @@ public class PlayerDao {
 
             session.getTransaction().commit();
             return players;
+        } catch (Exception e) {
+            throw new DatabaseOperationException("Failed to get players from database", e);
         }
     }
 
@@ -37,6 +47,8 @@ public class PlayerDao {
 
             session.getTransaction().commit();
             return player;
+        } catch (Exception e) {
+            throw new DatabaseOperationException("Failed to get player by id from database", e);
         }
     }
 
@@ -51,6 +63,8 @@ public class PlayerDao {
 
             session.getTransaction().commit();
             return playerOptional;
+        } catch (Exception e) {
+            throw new DatabaseOperationException("Failed to get player by name from database", e);
         }
     }
 

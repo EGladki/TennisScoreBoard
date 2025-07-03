@@ -1,8 +1,10 @@
 package com.gladkiei.tennisscoreboard.dao;
 
+import com.gladkiei.tennisscoreboard.exception.DatabaseOperationException;
 import com.gladkiei.tennisscoreboard.models.Match;
 import com.gladkiei.tennisscoreboard.utils.HibernateUtils;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.util.List;
 
@@ -21,6 +23,8 @@ public class MatchDao {
                     .setParameter("startId", startId)
                     .setMaxResults(5)
                     .getResultList();
+        } catch (Exception e) {
+            throw new DatabaseOperationException("Failed get tennis matches from database", e);
         }
     }
 
@@ -39,6 +43,8 @@ public class MatchDao {
                     .setFirstResult(startId - 1)
                     .setMaxResults(5)
                     .getResultList();
+        } catch (Exception e) {
+            throw new DatabaseOperationException("Failed get tennis matches with current player from database.", e);
         }
     }
 
@@ -48,9 +54,10 @@ public class MatchDao {
                             SELECT count(m) FROM Match m
                             
                             """, Long.class)
-                    .getResultList()
-                    .get(0);
+                    .getSingleResult();
             return l.intValue();
+        } catch (Exception e) {
+            throw new DatabaseOperationException("Failed get count of tennis matches from database.", e);
         }
     }
 
@@ -61,17 +68,24 @@ public class MatchDao {
                             WHERE m.player1.name = :name OR m.player2.name = :name
                             """, Long.class)
                     .setParameter("name", name)
-                    .getResultList()
-                    .get(0);
+                    .getSingleResult();
             return l.intValue();
+        } catch (Exception e) {
+            throw new DatabaseOperationException("Failed get count of tennis matches with current player from database.", e);
         }
     }
 
     public void save(Match match) {
+        Transaction transaction = null;
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
-            session.beginTransaction();
+            transaction = session.beginTransaction();
             session.persist(match);
-            session.getTransaction().commit();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new DatabaseOperationException("Failed to save tennis match in database.", e);
         }
     }
 
