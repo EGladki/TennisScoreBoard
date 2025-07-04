@@ -27,6 +27,7 @@ public class NewMatchServlet extends HttpServlet {
             String player2name = req.getParameter("player2");
             nameValidationUtils.validate(player1name);
             nameValidationUtils.validate(player2name);
+            nameValidationUtils.validateNameEquality(player1name, player2name);
 
             MatchScoreModel matchScoreModel = ongoingMatchService.startMatch(new PlayerRequestDto(player1name), new PlayerRequestDto(player2name));
             UUID uuid = matchScoreModel.getUuid();

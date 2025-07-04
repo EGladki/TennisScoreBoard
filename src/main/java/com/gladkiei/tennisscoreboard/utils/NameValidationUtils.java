@@ -15,6 +15,12 @@ public class NameValidationUtils {
         }
     }
 
+    public void validateNameEquality(String player1name, String player2name) {
+        if (player1name.equals(player2name)) {
+            throw new BadRequestException("Player names must not match");
+        }
+    }
+
     private boolean isNullOrBlank(String string) {
         return (string == null || string.isBlank());
     }

@@ -28,12 +28,7 @@ public class PlayerDao {
 
     public List<Player> getAll() {
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
-            session.beginTransaction();
-
-            List<Player> players = session.createQuery("FROM Player order by id", Player.class).getResultList();
-
-            session.getTransaction().commit();
-            return players;
+            return session.createQuery("FROM Player order by id", Player.class).getResultList();
         } catch (Exception e) {
             throw new DatabaseOperationException("Failed to get players from database", e);
         }
@@ -41,12 +36,7 @@ public class PlayerDao {
 
     public Player getById(Long id) {
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
-            session.beginTransaction();
-
-            Player player = session.find(Player.class, id);
-
-            session.getTransaction().commit();
-            return player;
+            return session.find(Player.class, id);
         } catch (Exception e) {
             throw new DatabaseOperationException("Failed to get player by id from database", e);
         }
@@ -54,15 +44,10 @@ public class PlayerDao {
 
     public Optional<Player> getByName(String name) {
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
-            session.beginTransaction();
-            Query<Player> query = session.createQuery("FROM Player WHERE name=:name", Player.class);
-            query.setParameter("name", name);
-            query.setMaxResults(1);
-
-            Optional<Player> playerOptional = query.uniqueResultOptional();
-
-            session.getTransaction().commit();
-            return playerOptional;
+            return session.createQuery("FROM Player WHERE name=:name", Player.class)
+                    .setParameter("name", name)
+                    .setMaxResults(1)
+                    .uniqueResultOptional();
         } catch (Exception e) {
             throw new DatabaseOperationException("Failed to get player by name from database", e);
         }

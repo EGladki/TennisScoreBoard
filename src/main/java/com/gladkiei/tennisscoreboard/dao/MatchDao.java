@@ -52,7 +52,6 @@ public class MatchDao {
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
             Long l = session.createQuery("""
                             SELECT count(m) FROM Match m
-                            
                             """, Long.class)
                     .getSingleResult();
             return l.intValue();
