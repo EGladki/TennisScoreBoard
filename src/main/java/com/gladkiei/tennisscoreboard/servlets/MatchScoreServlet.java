@@ -1,9 +1,9 @@
-package com.gladkiei.tennisscoreboard.servlet;
+package com.gladkiei.tennisscoreboard.servlets;
 
 import com.gladkiei.tennisscoreboard.dao.MatchScoreModelDao;
 import com.gladkiei.tennisscoreboard.dao.PlayerDao;
 import com.gladkiei.tennisscoreboard.models.Match;
-import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
+import com.gladkiei.tennisscoreboard.dto.MatchScoreModel;
 import com.gladkiei.tennisscoreboard.service.FinishedMatchesPersistenceService;
 import com.gladkiei.tennisscoreboard.service.scorestrategies.MatchScoreCalculationService;
 import jakarta.servlet.ServletException;

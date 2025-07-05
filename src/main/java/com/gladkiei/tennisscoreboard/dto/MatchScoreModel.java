@@ -1,4 +1,4 @@
-package com.gladkiei.tennisscoreboard.models;
+package com.gladkiei.tennisscoreboard.dto;
 
 import com.gladkiei.tennisscoreboard.enums.MatchState;
 import lombok.*;
@@ -11,7 +11,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @ToString
 public class MatchScoreModel {
-
     private UUID uuid;
     private PlayerScoreModel player1ScoreModel;
     private PlayerScoreModel player2ScoreModel;

@@ -1,4 +1,4 @@
-package com.gladkiei.tennisscoreboard.servlet;
+package com.gladkiei.tennisscoreboard.servlets;
 
 import com.gladkiei.tennisscoreboard.dao.MatchDao;
 import com.gladkiei.tennisscoreboard.models.Match;

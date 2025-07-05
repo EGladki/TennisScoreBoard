@@ -2,8 +2,8 @@ package com.gladkiei.tennisscoreboard.service;
 
 import com.gladkiei.tennisscoreboard.dao.MatchScoreModelDao;
 import com.gladkiei.tennisscoreboard.enums.MatchState;
-import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
-import com.gladkiei.tennisscoreboard.models.PlayerScoreModel;
+import com.gladkiei.tennisscoreboard.dto.MatchScoreModel;
+import com.gladkiei.tennisscoreboard.dto.PlayerScoreModel;
 import com.gladkiei.tennisscoreboard.service.scorestrategies.MatchScoreCalculationService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

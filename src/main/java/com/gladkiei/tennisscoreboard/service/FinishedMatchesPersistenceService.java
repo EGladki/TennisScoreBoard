@@ -4,7 +4,7 @@ import com.gladkiei.tennisscoreboard.dao.MatchDao;
 import com.gladkiei.tennisscoreboard.dao.MatchScoreModelDao;
 import com.gladkiei.tennisscoreboard.dao.PlayerDao;
 import com.gladkiei.tennisscoreboard.models.Match;
-import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
+import com.gladkiei.tennisscoreboard.dto.MatchScoreModel;
 import com.gladkiei.tennisscoreboard.models.Player;
 
 import java.util.UUID;

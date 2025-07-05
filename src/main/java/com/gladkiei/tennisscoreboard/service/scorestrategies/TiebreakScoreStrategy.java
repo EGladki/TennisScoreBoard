@@ -1,7 +1,7 @@
 package com.gladkiei.tennisscoreboard.service.scorestrategies;
 
-import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
-import com.gladkiei.tennisscoreboard.models.PlayerScoreModel;
+import com.gladkiei.tennisscoreboard.dto.MatchScoreModel;
+import com.gladkiei.tennisscoreboard.dto.PlayerScoreModel;
 
 import static com.gladkiei.tennisscoreboard.enums.MatchState.IN_PROGRESS;
 import static com.gladkiei.tennisscoreboard.service.scorestrategies.MatchScoreCalculationService.ONE_POINT;

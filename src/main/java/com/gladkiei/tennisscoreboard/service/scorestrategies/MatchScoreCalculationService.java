@@ -2,8 +2,8 @@ package com.gladkiei.tennisscoreboard.service.scorestrategies;
 
 import com.gladkiei.tennisscoreboard.dao.MatchScoreModelDao;
 import com.gladkiei.tennisscoreboard.enums.MatchState;
-import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
-import com.gladkiei.tennisscoreboard.models.PlayerScoreModel;
+import com.gladkiei.tennisscoreboard.dto.MatchScoreModel;
+import com.gladkiei.tennisscoreboard.dto.PlayerScoreModel;
 
 import java.util.Map;
 import java.util.UUID;
@@ -14,18 +14,18 @@ import static com.gladkiei.tennisscoreboard.service.OngoingMatchService.START_GA
 import static com.gladkiei.tennisscoreboard.service.OngoingMatchService.START_SCORE;
 
 public class MatchScoreCalculationService {
-    private final static int ZERO = 0;
+    public static final int FIRST_ADDING_SCORE = 15;
+    public static final int SECOND_ADDING_SCORE = 15;
+    public static final int THIRD_ADDING_SCORE = 10;
     final static int ONE_POINT = 1;
-    public final static int FIRST_ADDING_SCORE = 15;
-    public final static int SECOND_ADDING_SCORE = 15;
-    public final static int THIRD_ADDING_SCORE = 10;
-    private final static int MAX_SCORE = 40;
-    private final static int MAX_GAMES = 6;
-    private final static int MAX_SETS = 2;
     final static int MORE = 1;
     final static int LESS = -1;
-    private final static int TIEBREAK_SCORE_TO_WIN = 7;
-    private final static int DIFFERENCE_IN_SCORES_TO_WIN_TIEBREAK = 2;
+    private static final int ZERO = 0;
+    private static final int MAX_SCORE = 40;
+    private static final int MAX_GAMES = 6;
+    private static final int MAX_SETS = 2;
+    private static final int TIEBREAK_SCORE_TO_WIN = 7;
+    private static final int DIFFERENCE_IN_SCORES_TO_WIN_TIEBREAK = 2;
     private final MatchScoreModelDao matchScoreModelDao = new MatchScoreModelDao();
     private final Map<MatchState, ScoreStrategy> strategyMap = Map.of(
             IN_PROGRESS, new CommonScoreStrategy(this),

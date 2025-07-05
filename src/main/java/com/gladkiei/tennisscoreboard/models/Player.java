@@ -3,9 +3,13 @@ package com.gladkiei.tennisscoreboard.models;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Setter @Getter @NoArgsConstructor @AllArgsConstructor @ToString
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 @Entity
-@Table(name = "player")
+@Table(name = "players")
 public class Player {
 
     @Id

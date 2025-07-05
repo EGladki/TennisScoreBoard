@@ -5,7 +5,6 @@ import com.gladkiei.tennisscoreboard.models.Player;
 import com.gladkiei.tennisscoreboard.utils.HibernateUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 
 import java.util.List;
 import java.util.Optional;

@@ -3,6 +3,7 @@ package com.gladkiei.tennisscoreboard.service;
 import com.gladkiei.tennisscoreboard.dao.PlayerDao;
 import com.gladkiei.tennisscoreboard.dto.PlayerRequestDto;
 import com.gladkiei.tennisscoreboard.dto.PlayerResponseDto;
+import com.gladkiei.tennisscoreboard.exception.NotFoundException;
 import com.gladkiei.tennisscoreboard.models.Player;
 
 import java.util.Optional;
@@ -24,7 +25,11 @@ public class PlayerService {
 
     private PlayerResponseDto getPlayerResponseDtoFromDao(PlayerRequestDto playerRequestDto) {
         Optional<Player> player = playerDao.getByName(playerRequestDto.getName());
-        return convertToDto(player.get());
+        if (player.isPresent()) {
+            return convertToDto(player.get());
+        } else {
+            throw new NotFoundException("Player not found");
+        }
     }
 
     private boolean isPlayerAlreadyExist(PlayerRequestDto playerRequestDto) {

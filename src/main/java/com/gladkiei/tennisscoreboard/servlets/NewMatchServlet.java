@@ -1,8 +1,8 @@
-package com.gladkiei.tennisscoreboard.servlet;
+package com.gladkiei.tennisscoreboard.servlets;
 
 import com.gladkiei.tennisscoreboard.dto.PlayerRequestDto;
 import com.gladkiei.tennisscoreboard.exception.BadRequestException;
-import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
+import com.gladkiei.tennisscoreboard.dto.MatchScoreModel;
 import com.gladkiei.tennisscoreboard.service.OngoingMatchService;
 import com.gladkiei.tennisscoreboard.utils.NameValidationUtils;
 import jakarta.servlet.ServletException;

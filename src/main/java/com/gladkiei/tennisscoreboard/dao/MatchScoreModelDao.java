@@ -1,11 +1,12 @@
 package com.gladkiei.tennisscoreboard.dao;
 
-import com.gladkiei.tennisscoreboard.models.MatchScoreModel;
+import com.gladkiei.tennisscoreboard.dto.MatchScoreModel;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MatchScoreModelDao {
+    private static final ConcurrentHashMap<UUID, MatchScoreModel> ongoingMatches = new ConcurrentHashMap<>();
     private static MatchScoreModelDao instance;
 
     public static MatchScoreModelDao getInstance() {
@@ -14,8 +15,6 @@ public class MatchScoreModelDao {
         }
         return instance;
     }
-
-    private final static ConcurrentHashMap<UUID, MatchScoreModel> ongoingMatches = new ConcurrentHashMap<>();
 
     public void put(UUID uuid, MatchScoreModel model) {
         ongoingMatches.put(uuid, model);

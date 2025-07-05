@@ -1,4 +1,4 @@
-package com.gladkiei.tennisscoreboard.models;
+package com.gladkiei.tennisscoreboard.dto;
 
 import com.gladkiei.tennisscoreboard.enums.WinnerStatus;
 import lombok.*;
