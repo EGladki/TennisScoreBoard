@@ -157,15 +157,23 @@
                 <tr>
                     <th>Player One</th>
                     <th>Player Two</th>
-                    <th>Winner</th>
                 </tr>
                 </thead>
                 <tbody>
                 <c:forEach var="match" items="${matches}">
                     <tr>
-                        <td>${match.player1.name}</td>
-                        <td>${match.player2.name}</td>
-                        <td class="winner-cell">${match.winner.name}</td>
+                        <td>
+                                ${match.player1.name}
+                            <c:if test="${match.winner.id == match.player1.id}">
+                                🏆
+                            </c:if>
+                        </td>
+                        <td>
+                                ${match.player2.name}
+                            <c:if test="${match.winner.id == match.player2.id}">
+                                🏆
+                            </c:if>
+                        </td>
                     </tr>
                 </c:forEach>
                 </tbody>
