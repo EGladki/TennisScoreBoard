@@ -18,7 +18,7 @@ public class OngoingMatchService {
     public static final int START_SET = 0;
     private final PlayerService playerService = new PlayerService();
 
-    public MatchScoreModel startMatch(PlayerRequestDto player1RequestDto, PlayerRequestDto player2RequestDto) {
+    public MatchScoreModel startAndReturnMatch(PlayerRequestDto player1RequestDto, PlayerRequestDto player2RequestDto) {
         PlayerResponseDto player1ResponseDto = playerService.getPlayerResponseDto(player1RequestDto);
         PlayerResponseDto player2ResponseDto = playerService.getPlayerResponseDto(player2RequestDto);
         MatchScoreModel matchScoreModel = createOngoingMatch(player1ResponseDto, player2ResponseDto);

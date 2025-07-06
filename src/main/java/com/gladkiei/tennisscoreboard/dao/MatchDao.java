@@ -35,11 +35,11 @@ public class MatchDao {
                             JOIN FETCH m.player1
                             JOIN FETCH m.player2
                             LEFT JOIN FETCH m.winner
-                            WHERE m.player1.name = :name OR m.player2.name = :name
+                            WHERE m.player1.name LIKE :name OR m.player2.name LIKE :name
                             ORDER BY m.id
                             LIMIT 5
                             """, Match.class)
-                    .setParameter("name", name)
+                    .setParameter("name", "%" + name + "%")
                     .setFirstResult(startId - 1)
                     .setMaxResults(5)
                     .getResultList();
@@ -62,13 +62,13 @@ public class MatchDao {
 
     public int getCountOfMatchesWithCurrentPlayer(String name) {
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
-            Long l = session.createQuery("""
+            return session.createQuery("""
                             SELECT count(m) FROM Match m
-                            WHERE m.player1.name = :name OR m.player2.name = :name
+                            WHERE m.player1.name LIKE :name OR m.player2.name LIKE :name
                             """, Long.class)
-                    .setParameter("name", name)
-                    .getSingleResult();
-            return l.intValue();
+                    .setParameter("name", "%" + name + "%")
+                    .getSingleResult()
+                    .intValue();
         } catch (Exception e) {
             throw new DatabaseOperationException("Failed get count of tennis matches with current player from database.", e);
         }

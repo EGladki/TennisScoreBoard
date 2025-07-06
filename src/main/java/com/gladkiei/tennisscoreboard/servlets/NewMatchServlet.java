@@ -29,7 +29,7 @@ public class NewMatchServlet extends HttpServlet {
             nameValidationUtils.validate(player2name);
             nameValidationUtils.validateNameEquality(player1name, player2name);
 
-            MatchScoreModel matchScoreModel = ongoingMatchService.startMatch(new PlayerRequestDto(player1name), new PlayerRequestDto(player2name));
+            MatchScoreModel matchScoreModel = ongoingMatchService.startAndReturnMatch(new PlayerRequestDto(player1name), new PlayerRequestDto(player2name));
             UUID uuid = matchScoreModel.getUuid();
             resp.sendRedirect("match-score" + "?uuid=" + uuid);
 
