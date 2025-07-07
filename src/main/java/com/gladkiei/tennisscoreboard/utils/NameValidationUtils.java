@@ -1,6 +1,6 @@
 package com.gladkiei.tennisscoreboard.utils;
 
-import com.gladkiei.tennisscoreboard.exception.BadRequestException;
+import com.gladkiei.tennisscoreboard.exceptions.BadRequestException;
 
 public class NameValidationUtils {
     public void validate(String name) {

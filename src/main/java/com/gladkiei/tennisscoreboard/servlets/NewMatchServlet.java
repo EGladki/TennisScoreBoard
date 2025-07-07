@@ -1,7 +1,7 @@
 package com.gladkiei.tennisscoreboard.servlets;
 
 import com.gladkiei.tennisscoreboard.dto.PlayerRequestDto;
-import com.gladkiei.tennisscoreboard.exception.BadRequestException;
+import com.gladkiei.tennisscoreboard.exceptions.BadRequestException;
 import com.gladkiei.tennisscoreboard.dto.MatchScoreModel;
 import com.gladkiei.tennisscoreboard.service.OngoingMatchService;
 import com.gladkiei.tennisscoreboard.utils.NameValidationUtils;
@@ -23,8 +23,8 @@ public class NewMatchServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         try {
-            String player1name = req.getParameter("player1");
-            String player2name = req.getParameter("player2");
+            String player1name = req.getParameter("player1").trim();
+            String player2name = req.getParameter("player2").trim();
             nameValidationUtils.validate(player1name);
             nameValidationUtils.validate(player2name);
             nameValidationUtils.validateNameEquality(player1name, player2name);

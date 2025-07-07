@@ -3,7 +3,7 @@ package com.gladkiei.tennisscoreboard.service;
 import com.gladkiei.tennisscoreboard.dao.PlayerDao;
 import com.gladkiei.tennisscoreboard.dto.PlayerRequestDto;
 import com.gladkiei.tennisscoreboard.dto.PlayerResponseDto;
-import com.gladkiei.tennisscoreboard.exception.NotFoundException;
+import com.gladkiei.tennisscoreboard.exceptions.NotFoundException;
 import com.gladkiei.tennisscoreboard.models.Player;
 
 import java.util.Optional;

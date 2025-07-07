@@ -135,6 +135,13 @@
 <main>
     <div class="container">
         <h1>Matches</h1>
+
+        <c:if test="${not empty errorMessage}">
+            <div style="color: red; font-weight: bold; margin-bottom: 20px;">
+                    ${errorMessage}
+            </div>
+        </c:if>
+
         <div class="input-container">
             <form action="matches" method="get" class="input-container">
                 <input name="filter_by_player_name"
@@ -151,51 +158,60 @@
 
         <c:set var="page" value="${not empty param.page ? param.page : 1}"/>
 
-        <div class="table-container">
-            <table class="table-matches">
-                <thead>
-                <tr>
-                    <th>Player One</th>
-                    <th>Player Two</th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach var="match" items="${matches}">
+        <c:if test="${empty matches}">
+            <div style="color: red; font-weight: bold; margin-bottom: 20px;">
+                No matches found.
+            </div>
+        </c:if>
+
+        <c:if test="${not empty matches}">
+            <div class="table-container">
+                <table class="table-matches">
+                    <thead>
                     <tr>
-                        <td>
-                                ${match.player1.name}
-                            <c:if test="${match.winner.id == match.player1.id}">
-                                🏆
-                            </c:if>
-                        </td>
-                        <td>
-                                ${match.player2.name}
-                            <c:if test="${match.winner.id == match.player2.id}">
-                                🏆
-                            </c:if>
-                        </td>
+                        <th>Player One</th>
+                        <th>Player Two</th>
                     </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach var="match" items="${matches}">
+                        <tr>
+                            <td>
+                                    ${match.player1.name}
+                                <c:if test="${match.winner.id == match.player1.id}">
+                                    🏆
+                                </c:if>
+                            </td>
+                            <td>
+                                    ${match.player2.name}
+                                <c:if test="${match.winner.id == match.player2.id}">
+                                    🏆
+                                </c:if>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <a class="prev" href="matches?${filterParamName}&page=${page > 1 ? page - 1 : 1}"> &lt; </a>
+
+                <c:forEach begin="1" end="${totalPages}" var="i">
+                    <c:choose>
+                        <c:when test="${i == page}">
+                            <a class="current" href="matches?${filterParamName}&page=${i}">${i}</a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="matches?${filterParamName}&page=${i}">${i}</a>
+                        </c:otherwise>
+                    </c:choose>
                 </c:forEach>
-                </tbody>
-            </table>
-        </div>
 
-        <div class="pagination">
-            <a class="prev" href="matches?${filterParamName}&page=${page > 1 ? page - 1 : 1}"> &lt; </a>
-
-            <c:forEach begin="1" end="${totalPages}" var="i">
-                <c:choose>
-                    <c:when test="${i == page}">
-                        <a class="current" href="matches?${filterParamName}&page=${i}">${i}</a>
-                    </c:when>
-                    <c:otherwise>
-                        <a href="matches?${filterParamName}&page=${i}">${i}</a>
-                    </c:otherwise>
-                </c:choose>
-            </c:forEach>
-
-            <a class="next" href="matches?${filterParamName}&page=${page < totalPages ? page + 1 : totalPages}"> &gt; </a>
-        </div>
+                <a class="next" href="matches?${filterParamName}&page=${page < totalPages ? page + 1 : totalPages}">
+                    &gt; </a>
+            </div>
+        </c:if>
     </div>
 </main>
 

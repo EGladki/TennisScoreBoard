@@ -1,6 +1,6 @@
 package com.gladkiei.tennisscoreboard.dao;
 
-import com.gladkiei.tennisscoreboard.exception.DatabaseOperationException;
+import com.gladkiei.tennisscoreboard.exceptions.DatabaseOperationException;
 import com.gladkiei.tennisscoreboard.models.Match;
 import com.gladkiei.tennisscoreboard.utils.HibernateUtils;
 import org.hibernate.Session;
@@ -35,7 +35,7 @@ public class MatchDao {
                             JOIN FETCH m.player1
                             JOIN FETCH m.player2
                             LEFT JOIN FETCH m.winner
-                            WHERE m.player1.name LIKE :name OR m.player2.name LIKE :name
+                            WHERE UPPER(m.player1.name) LIKE :name OR UPPER(m.player2.name) LIKE :name
                             ORDER BY m.id
                             LIMIT 5
                             """, Match.class)
@@ -64,7 +64,7 @@ public class MatchDao {
         try (Session session = HibernateUtils.getSessionFactory().openSession()) {
             return session.createQuery("""
                             SELECT count(m) FROM Match m
-                            WHERE m.player1.name LIKE :name OR m.player2.name LIKE :name
+                            WHERE UPPER(m.player1.name) LIKE :name OR UPPER(m.player2.name) LIKE :name
                             """, Long.class)
                     .setParameter("name", "%" + name + "%")
                     .getSingleResult()

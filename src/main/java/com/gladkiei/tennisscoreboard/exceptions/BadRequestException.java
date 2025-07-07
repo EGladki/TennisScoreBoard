@@ -1,4 +1,4 @@
-package com.gladkiei.tennisscoreboard.exception;
+package com.gladkiei.tennisscoreboard.exceptions;
 
 public class BadRequestException extends RuntimeException {
     public BadRequestException(String message) {

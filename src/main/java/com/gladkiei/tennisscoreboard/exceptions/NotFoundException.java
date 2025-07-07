@@ -1,4 +1,4 @@
-package com.gladkiei.tennisscoreboard.exception;
+package com.gladkiei.tennisscoreboard.exceptions;
 
 public class NotFoundException extends RuntimeException {
     public NotFoundException(String message) {

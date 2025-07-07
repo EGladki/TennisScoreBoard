@@ -31,10 +31,10 @@ public class MatchScoreServlet extends HttpServlet {
         if (isCompleted(matchScoreModel)) {
             Match match = finishedMatchesPersistenceService.getSavedMatch(uuid);
             setAllAttributesForMatch(req, match);
-            req.getRequestDispatcher("/finished-match.jsp").forward(req, resp);
+            req.getRequestDispatcher("finished-match.jsp").forward(req, resp);
         } else {
             setAllAttributesForModel(req, uuid, matchScoreModel);
-            req.getRequestDispatcher("/match-score.jsp").forward(req, resp);
+            req.getRequestDispatcher("match-score.jsp").forward(req, resp);
         }
     }
 
@@ -45,7 +45,7 @@ public class MatchScoreServlet extends HttpServlet {
 
         UUID uuid = UUID.fromString(req.getParameter("uuid"));
         matchScoreCalculationService.updateScore(uuid, id);
-        resp.sendRedirect("match-score" + "?uuid=" + uuid);
+        resp.sendRedirect("match-score?uuid=" + uuid);
     }
 
     private void setAllAttributesForModel(HttpServletRequest req, UUID uuid, MatchScoreModel matchScoreModel) {

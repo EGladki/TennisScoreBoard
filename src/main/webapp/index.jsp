@@ -15,17 +15,14 @@
 <header class="header">
     <section class="nav-header">
         <div class="brand">
-            <div class="nav-toggle">
-            </div>
+            <img src="images/menu.png" alt="Logo" class="logo">
             <span class="logo-text">TennisScoreboard</span>
         </div>
-        <div>
-            <nav class="nav-links">
-                <a class="nav-link" href="#">Home</a>
-                <a class="nav-link" href="matches">Matches</a>
-                <a class="nav-link" href="players">Players</a>
-            </nav>
-        </div>
+        <nav class="nav-links">
+            <a href="index.jsp">Home</a>
+            <a href="matches">Matches</a>
+            <a href="players">Players</a>
+        </nav>
     </section>
 </header>
 <main>

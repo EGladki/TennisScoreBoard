@@ -1,6 +1,6 @@
 package com.gladkiei.tennisscoreboard.dao;
 
-import com.gladkiei.tennisscoreboard.exception.DatabaseOperationException;
+import com.gladkiei.tennisscoreboard.exceptions.DatabaseOperationException;
 import com.gladkiei.tennisscoreboard.models.Player;
 import com.gladkiei.tennisscoreboard.utils.HibernateUtils;
 import org.hibernate.Session;

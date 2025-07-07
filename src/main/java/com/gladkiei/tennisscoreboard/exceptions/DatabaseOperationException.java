@@ -1,4 +1,4 @@
-package com.gladkiei.tennisscoreboard.exception;
+package com.gladkiei.tennisscoreboard.exceptions;
 
 public class DatabaseOperationException extends RuntimeException {
     public DatabaseOperationException(String message, Throwable cause) {
