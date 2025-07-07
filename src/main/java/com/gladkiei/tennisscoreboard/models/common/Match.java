@@ -1,4 +1,4 @@
-package com.gladkiei.tennisscoreboard.models;
+package com.gladkiei.tennisscoreboard.models.common;
 
 import jakarta.persistence.*;
 import lombok.*;

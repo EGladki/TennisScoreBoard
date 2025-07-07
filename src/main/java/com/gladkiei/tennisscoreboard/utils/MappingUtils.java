@@ -2,7 +2,7 @@ package com.gladkiei.tennisscoreboard.utils;
 
 import com.gladkiei.tennisscoreboard.dto.PlayerRequestDto;
 import com.gladkiei.tennisscoreboard.dto.PlayerResponseDto;
-import com.gladkiei.tennisscoreboard.models.Player;
+import com.gladkiei.tennisscoreboard.models.common.Player;
 import org.modelmapper.ModelMapper;
 
 public class MappingUtils {

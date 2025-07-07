@@ -2,7 +2,7 @@ package com.gladkiei.tennisscoreboard.servlets;
 
 import com.gladkiei.tennisscoreboard.dao.MatchDao;
 import com.gladkiei.tennisscoreboard.exceptions.BadRequestException;
-import com.gladkiei.tennisscoreboard.models.Match;
+import com.gladkiei.tennisscoreboard.models.common.Match;
 import com.gladkiei.tennisscoreboard.service.PaginationService;
 import com.gladkiei.tennisscoreboard.utils.NameValidationUtils;
 import jakarta.servlet.ServletException;

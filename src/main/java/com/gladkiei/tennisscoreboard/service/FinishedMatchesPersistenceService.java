@@ -3,9 +3,9 @@ package com.gladkiei.tennisscoreboard.service;
 import com.gladkiei.tennisscoreboard.dao.MatchDao;
 import com.gladkiei.tennisscoreboard.dao.MatchScoreModelDao;
 import com.gladkiei.tennisscoreboard.dao.PlayerDao;
-import com.gladkiei.tennisscoreboard.models.Match;
-import com.gladkiei.tennisscoreboard.dto.MatchScoreModel;
-import com.gladkiei.tennisscoreboard.models.Player;
+import com.gladkiei.tennisscoreboard.models.common.Match;
+import com.gladkiei.tennisscoreboard.models.entity.MatchScoreModel;
+import com.gladkiei.tennisscoreboard.models.common.Player;
 
 import java.util.UUID;
 

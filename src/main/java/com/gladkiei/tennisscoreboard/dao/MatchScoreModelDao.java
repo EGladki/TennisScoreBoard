@@ -1,6 +1,6 @@
 package com.gladkiei.tennisscoreboard.dao;
 
-import com.gladkiei.tennisscoreboard.dto.MatchScoreModel;
+import com.gladkiei.tennisscoreboard.models.entity.MatchScoreModel;
 import com.gladkiei.tennisscoreboard.exceptions.NotFoundException;
 
 import java.util.UUID;

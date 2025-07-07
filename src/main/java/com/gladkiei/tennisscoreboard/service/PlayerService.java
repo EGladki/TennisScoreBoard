@@ -4,7 +4,7 @@ import com.gladkiei.tennisscoreboard.dao.PlayerDao;
 import com.gladkiei.tennisscoreboard.dto.PlayerRequestDto;
 import com.gladkiei.tennisscoreboard.dto.PlayerResponseDto;
 import com.gladkiei.tennisscoreboard.exceptions.NotFoundException;
-import com.gladkiei.tennisscoreboard.models.Player;
+import com.gladkiei.tennisscoreboard.models.common.Player;
 
 import java.util.Optional;
 

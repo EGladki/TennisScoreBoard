@@ -1,7 +1,7 @@
 package com.gladkiei.tennisscoreboard.servlets;
 
 import com.gladkiei.tennisscoreboard.dao.PlayerDao;
-import com.gladkiei.tennisscoreboard.models.Player;
+import com.gladkiei.tennisscoreboard.models.common.Player;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

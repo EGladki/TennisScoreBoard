@@ -1,7 +1,7 @@
 package com.gladkiei.tennisscoreboard.utils;
 
-import com.gladkiei.tennisscoreboard.models.Match;
-import com.gladkiei.tennisscoreboard.models.Player;
+import com.gladkiei.tennisscoreboard.models.common.Match;
+import com.gladkiei.tennisscoreboard.models.common.Player;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;

@@ -1,7 +1,7 @@
 package com.gladkiei.tennisscoreboard.service.scorestrategies;
 
-import com.gladkiei.tennisscoreboard.dto.MatchScoreModel;
-import com.gladkiei.tennisscoreboard.dto.PlayerScoreModel;
+import com.gladkiei.tennisscoreboard.models.entity.MatchScoreModel;
+import com.gladkiei.tennisscoreboard.models.entity.PlayerScoreModel;
 
 public class CommonScoreStrategy implements ScoreStrategy {
 
